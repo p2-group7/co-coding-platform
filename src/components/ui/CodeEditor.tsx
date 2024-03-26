@@ -5,7 +5,7 @@
 
 import { useRef } from "react";
 import * as Y from "yjs";
-import { WebrtcProvider } from "y-webrtc";
+import { WebsocketProvider } from "y-websocket";
 import { MonacoBinding } from "y-monaco";
 import * as monaco from "monaco-editor";
 import Editor, { Monaco } from "@monaco-editor/react";
@@ -36,7 +36,12 @@ export default function CodeEditor({ roomId }: CodeEditorProps) {
     // Initialize YJS
     const doc = new Y.Doc(); // a collection of shared objects -> Text
     // Connect to peers (or start connection) with WebRTC
-    const provider = new WebrtcProvider(roomId, doc, {signaling: ["wss://y-webrtc-signaler-1r7g.onrender.com"]}); // room1, room2
+    const provider = new WebsocketProvider(
+      "wss://y-websocket-xwh3.onrender.com",
+      roomId,
+      doc,
+      //{ WebSocketPolyfill: require("ws") },
+    );
     const type = doc.getText("monaco"); // doc { "monaco": "what our IDE is showing" }
     // Bind YJS to Monaco
     const editorModel = editorRef.current.getModel();
