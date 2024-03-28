@@ -1,10 +1,9 @@
-import { api } from "@/trpc/server";
+import CodeEditor from "@/components/ui/CodeEditor";
 import Navbar from "@/components/Navbar";
 import { getGroups } from "@/server/api/routers/group";
 import type { GroupInfo } from "@/components/Navbar";
 
 // Make a database call to fetch groups data
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const groupsData = await getGroups();
 
 // Map the retrieved data to GroupInfo interface
@@ -16,10 +15,12 @@ const groups: GroupInfo[] = groupsData.map((group: GroupInfo) => ({
 }));
 export default async function Home() {
   return (
-   
     <main>
       <div>
-        <Navbar groups={groups} />
+        <Navbar groups={groups} /> {/* Pass groups data to Navbar component */}
+      </div>
+      <div>
+        <CodeEditor roomId="testtt" />
       </div>
     </main>
   );
