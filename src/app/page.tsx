@@ -1,17 +1,23 @@
+import { api } from "@/trpc/server";
 import Navbar from "@/components/Navbar";
-import { getGroups } from "@/server/api/routers/group";
 import type { GroupInfo } from "@/components/Navbar";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "@/server/api/root";
 
-// Make a database call to fetch groups data
-const groupsData = await getGroups();
-
-// Map the retrieved data to GroupInfo interface
-const groups: GroupInfo[] = groupsData.map((group: GroupInfo) => ({
-  id: group.id,
-  name: group.name,
-  href: `/codespace`, // Assuming href is constructed based on group id
-}));
 export default async function Home() {
+  type RouterOutput = inferRouterOutputs<AppRouter>;
+
+  type GetGroupsOutput = RouterOutput["group"]["getGroups"];
+
+  // Make a database call to fetch groups data
+  const groupsData: GetGroupsOutput = await api.group.getGroups();
+
+  // Map the retrieved data to GroupInfo interface
+  const groups: GroupInfo[] = groupsData.map((group: GetGroupsOutput[0]) => ({
+    id: group.id,
+    name: group.name,
+    href: `/codespace`,
+  }));
   return (
     <main>
       <div>
