@@ -1,9 +1,7 @@
 "use client";
-
 import * as React from "react";
-import Link from "next/link";
-
 import { cn } from "@/lib/utils";
+
 
 import {
   NavigationMenu,
@@ -15,50 +13,48 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
-const components: { title: string; href: string; description: string }[] = [
+const menuComponents: { title: string; href: string; description: string }[] = [
   {
-    title: "Group 1",
-    href: "/docs/primitives/alert-dialog",
-    description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+    title: "Main Page / Login",
+    href: "/",
+    description: "",
   },
   {
-    title: "Group 2",
-    href: "/docs/primitives/hover-card",
-    description:
-      "For sighted users to preview content available behind a link.",
-  },
-  {
-    title: "Group 3",
-    href: "/docs/primitives/progress",
-    description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
-  },
-  {
-    title: "Group 4",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
-  },
-  {
-    title: "Group 5",
-    href: "/docs/primitives/tabs",
-    description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-  },
-  {
-    title: "Group 6",
-    href: "/docs/primitives/tooltip",
-    description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+    title: "Sign Out",
+    href: "/signout",
+    description: "",
   },
 ];
 
-export default function NavigationMenuDemo() {
+export interface GroupInfo {
+  id: number;
+  name: string;
+  href: string;
+}
+
+export function NavigationMenuDemo({ groups }: { groups: GroupInfo[] }) {
   return (
     <div>
       <NavigationMenu>
         <NavigationMenuList>
-          <NavigationMenuItem className="w-40">
+          <NavigationMenuItem className="w-22 h-11">
+            <NavigationMenuTrigger className="h-full w-full select-none justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
+              Menu
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid w-[300px] gap-3 p-4 md:w-[400px] md:grid-cols-2 lg:w-[600px] ">
+                {menuComponents.map((component) => (
+                  <ListItem
+                    key={component.title}
+                    title={component.title}
+                    href={component.href}
+                  ></ListItem>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem className="w-25 h-11">
             <NavigationMenuTrigger className="h-full w-full select-none justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
               Courses
             </NavigationMenuTrigger>
@@ -71,61 +67,39 @@ export default function NavigationMenuDemo() {
                       href="/"
                     >
                       <div className="mb-2 mt-4 text-lg font-medium">
-                        shadcn/ui
+                        Your Courses
                       </div>
                       <p className="text-sm leading-tight text-muted-foreground">
-                        Beautifully designed components built with Radix UI and
-                        Tailwind CSS.
+                        Have fun 😎
                       </p>
                     </a>
                   </NavigationMenuLink>
                 </li>
-                <ListItem href="/docs" title="Introduction">
-                  Re-usable components built using Radix UI and Tailwind CSS.
+                <ListItem href="/docs" title="IMPR">
+                  Imperative Programming
                 </ListItem>
-                <ListItem href="/docs/installation" title="Installation">
-                  How to install dependencies and structure your app.
+                <ListItem href="/docs/installation" title="ALG">
+                  Algorithms and Data Structures
                 </ListItem>
-                <ListItem href="/docs/primitives/typography" title="Typography">
-                  Styles for headings, paragraphs, lists...etc
+                <ListItem href="/docs/primitives/typography" title="SLIAL">
+                  hell
                 </ListItem>
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
 
-          <NavigationMenuItem className="w-40">
+          <NavigationMenuItem className="w-25 h-11">
             <NavigationMenuTrigger className="h-full w-full select-none justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
-              Exercises
+              Groups
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[300px] gap-3 p-4 md:w-[400px] md:grid-cols-2 lg:w-[600px] ">
-                {components.map((component) => (
+                {groups.map((group) => (
                   <ListItem
-                    key={component.title}
-                    title={component.title}
-                    href={component.href}
-                  >
-                    {component.description}
-                  </ListItem>
-                ))}
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem className="w-40">
-            <NavigationMenuTrigger className="h-full w-full select-none justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
-              Menu
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid w-[300px] gap-3 p-4 md:w-[400px] md:grid-cols-2 lg:w-[600px] ">
-                {components.map((component) => (
-                  <ListItem
-                    key={component.title}
-                    title={component.title}
-                    href={component.href}
-                  >
-                    {component.description}
-                  </ListItem>
+                    key={group.id}
+                    title={group.name}
+                    href={group.href}
+                  ></ListItem>
                 ))}
               </ul>
             </NavigationMenuContent>
@@ -161,3 +135,5 @@ const ListItem = React.forwardRef<
   );
 });
 ListItem.displayName = "ListItem";
+
+export default NavigationMenuDemo;

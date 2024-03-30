@@ -1,3 +1,4 @@
+import CodeEditor from "@/components/ui/CodeEditor";
 import { api } from "@/trpc/server";
 import Navbar from "@/components/Navbar";
 import type { GroupInfo } from "@/components/Navbar";
@@ -22,6 +23,9 @@ export default async function Home() {
     <main>
       <div>
         <Navbar groups={groups} /> {/* Pass groups data to Navbar component */}
+      </div>
+      <div>
+        <CodeEditor roomId="testtt"/>
       </div>
     </main>
   );
