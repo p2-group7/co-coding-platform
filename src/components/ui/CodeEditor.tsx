@@ -51,6 +51,7 @@ export default function CodeEditor({ roomId }: CodeEditorProps) {
     });
 
     const state = EditorState.create({
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
       doc: yText.toString(),
       extensions: [
         basicSetup,
@@ -74,7 +75,7 @@ export default function CodeEditor({ roomId }: CodeEditorProps) {
         doc.destroy();
       }
     };
-  }, []);
+  }, [roomId]);
 
   return (
     <div>
