@@ -16,24 +16,26 @@ import { oneDark } from "@codemirror/theme-one-dark";
 
 interface CodeEditorProps {
   roomId: string;
+  username: string;
 }
 
-export default function CodeEditor({ roomId }: CodeEditorProps) {
+export default function CodeEditor({ roomId, username }: CodeEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const doc = new Y.Doc(); // a collection of shared objects -> Text
-    let provider: WebsocketProvider | null = null;
+
+    let webrtcprovider: WebsocketProvider | null = null;
     // Connect to peers (or start connection) with websocket
-    provider = new WebsocketProvider(
+    webrtcprovider = new WebsocketProvider(
       "wss://y-websocket-xwh3.onrender.com",
       roomId,
       doc,
     );
 
     // Listen to sync events and only update the editor when the sync is complete
-    provider.on("sync", (event: boolean) => {
+    webrtcprovider.on("sync", (event: boolean) => {
       console.log(event);
       setLoading(false);
     });
@@ -42,12 +44,10 @@ export default function CodeEditor({ roomId }: CodeEditorProps) {
 
     const yUndoManager = new Y.UndoManager(yText);
 
-    const color = RandomColor();
-
     // TODO fix to be current user and a random color
-    provider.awareness.setLocalState({
-      name: "Emanuel",
-      color: color,
+    webrtcprovider.awareness.setLocalStateField("user", {
+      name: username,
+      color: RandomColor(),
     });
 
     const state = EditorState.create({
@@ -57,7 +57,7 @@ export default function CodeEditor({ roomId }: CodeEditorProps) {
         basicSetup,
         javascript(),
         oneDark,
-        yCollab(yText, provider.awareness, {
+        yCollab(yText, webrtcprovider.awareness, {
           yUndoManager,
         }),
       ],
@@ -70,8 +70,8 @@ export default function CodeEditor({ roomId }: CodeEditorProps) {
     });
     return () => {
       view.destroy();
-      if (provider) {
-        provider.disconnect();
+      if (webrtcprovider) {
+        webrtcprovider.disconnect();
         doc.destroy();
       }
     };
