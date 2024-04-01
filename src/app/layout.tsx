@@ -6,6 +6,13 @@ import { TRPCReactProvider } from "@/trpc/react";
 
 import { ThemeProvider } from "@/components/theme-provider";
 
+import { api } from "@/trpc/server";
+import Navbar from "@/components/Navbar";
+import type { GroupInfo } from "@/components/Navbar";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "@/server/api/root";
+
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -17,16 +24,37 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+  type RouterOutput = inferRouterOutputs<AppRouter>;
+
+  type GetGroupsOutput = RouterOutput["group"]["getGroups"];
+
+
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Make a database call to fetch groups data
+  const groupsData: GetGroupsOutput = await api.group.getGroups();
+
+  // Map the retrieved data to GroupInfo interface
+  const groups: GroupInfo[] = groupsData.map((group: GetGroupsOutput[0]) => ({
+    id: group.id,
+    name: group.name,
+    href: `/codespace/` + group.id,
+  }));
+
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="dark">
-          <TRPCReactProvider>{children}</TRPCReactProvider>
+          <TRPCReactProvider>
+            <div>
+              <Navbar groups={groups} /> {/* Pass groups data to Navbar component */}
+            </div>
+            {children}
+          </TRPCReactProvider>
         </ThemeProvider>
       </body>
     </html>
