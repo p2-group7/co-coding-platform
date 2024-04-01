@@ -10,6 +10,15 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Courses {
+    id          Int    @id @default(autoincrement())
+    name        String
+    nameShort   String
+    professor   String
+
+    @@index([name])
+}
+
 model User {
     id       Int    @id @default(autoincrement())
     username String
