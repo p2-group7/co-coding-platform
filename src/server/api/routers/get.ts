@@ -10,7 +10,7 @@ export const getRouter = createTRPCRouter({
       },
     });
   }),
-  getCourses: publicProcedure.query(({ ctx, input }) => {
+  getCourses: publicProcedure.query(async ({ ctx }) => {
     return ctx.db.course.findMany();
   }),
 });

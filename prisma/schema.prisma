@@ -9,27 +9,25 @@ datasource db {
 
 // TODO: FIX THIS with both user and username. Done with completion of next auth task
 model User {
-  id       Int      @id @default(autoincrement())
-  username String
-  password String
-  group    Group    @relation(fields: [groupId], references: [id])
-  groupId  Int
-  courses  Course[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        Int              @id @default(autoincrement())
+  username  String
+  password  String
+  groupId   Int
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  group     Group            @relation(fields: [groupId], references: [id])
+  courses   UsersOnCourses[]
 
   @@index([username])
 }
 
 model Group {
-  id      Int    @id @default(autoincrement())
-  name    String
-  members User[]
-  roomId  String @default(uuid())
-
+  id        Int      @id @default(autoincrement())
+  name      String
+  roomId    String   @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  members   User[]
 
   @@index([name])
 }
@@ -90,34 +88,36 @@ model Group {
   }
 // One single course
 model Course {
-  id          Int     @id @default(autoincrement())
+  id          Int              @id @default(autoincrement())
   name        String
   abrev       String
   description String?
+  lectures    Lecture[]
+  users       UsersOnCourses[]
+}
 
-  lectures Lecture[]
+model UsersOnCourses {
+  userId   Int
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+  user     User   @relation(fields: [userId], references: [id])
 
-  User   User? @relation(fields: [userId], references: [id])
-  userId Int?
+  @@id([userId, courseId])
 }
 
 model Lecture {
   id          Int        @id @default(autoincrement())
   name        String
   description String?
+  courseId    Int
   exercises   Exercise[]
   course      Course     @relation(fields: [courseId], references: [id])
-  courseId    Int
 }
 
 model Exercise {
   id          Int     @id @default(autoincrement())
   name        String
   description String?
-  lecture     Lecture @relation(fields: [lectureId], references: [id])
   lectureId   Int
-  //Does it need some extra stuff about correct solution etc?
-  //The premade tests? not sure how this will work
+  lecture     Lecture @relation(fields: [lectureId], references: [id])
 }
-
-//TODO: OPTIONAL: Make a model that contains things such as PDF's etc.

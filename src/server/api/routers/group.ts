@@ -1,5 +1,4 @@
 import { db } from "@/server/db";
-import type { GroupInfo } from "@/components/Navbar";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
