@@ -1,7 +1,5 @@
 "use client";
-import {
-  Card,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Sheet,
   SheetClose,
@@ -34,6 +32,7 @@ const FormSchema = z.object({
   }),
   abrev: z.string().min(1).max(10),
 });
+
 const CourseCreatorCard = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -100,7 +99,7 @@ const CourseCreatorCard = () => {
                   )}
                 />
                 <SheetClose>
-                <Button type="submit">Submit</Button>
+                  <Button type="submit">Submit</Button>
                 </SheetClose>
               </form>
             </Form>

@@ -1,6 +1,8 @@
 import CourseCard from "@/components/course/CourseCard";
 import { api } from "@/trpc/server";
 import React from "react";
+import CreateLectureCard from "@/components/course/CreateLectureCard";
+
 
 export default async function page({ params }: { params: { course: string } }) {
   const course = await api.course.getCourse({ id: Number(params.course) });
@@ -29,7 +31,10 @@ export default async function page({ params }: { params: { course: string } }) {
       </p>
       <br></br>
       <h1 className="pt-10 text-5xl">Course Lectures</h1>
-      <div className="m-10 grid grid-cols-5 gap-4">{lectureElements}</div>
+      <div 
+        className="m-10 grid grid-cols-5 gap-4">{lectureElements}
+        <CreateLectureCard />
+      </div>
     </div>
   );
 }
