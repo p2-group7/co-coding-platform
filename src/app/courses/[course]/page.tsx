@@ -24,8 +24,8 @@ export default async function page({ params }: { params: { course: string } }) {
   });
 
   return (
-    <div>
-      <h1 className="pb-5 text-6xl">{course?.name}</h1>
+    <div className="container mx-auto px-1">
+      <h1 className="pb-5 text-6xl mt-6">{course?.name}</h1>
       <p className="text-white-700 rounded-lg border-2 border-secondary bg-secondary bg-gradient-to-b from-muted/50 to-muted p-6 text-lg no-underline outline-none focus:shadow-md">
         {course?.description}
       </p>
