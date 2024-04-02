@@ -75,7 +75,7 @@ export function NavigationMenuDemo({ groups }: { groups: GroupInfo[] }) {
                     </a>
                   </NavigationMenuLink>
                 </li>
-                <ListItem href="/docs" title="IMPR">
+                <ListItem href="/exercise-menu" title="IMPR">
                   Imperative Programming
                 </ListItem>
                 <ListItem href="/docs/installation" title="ALG">
