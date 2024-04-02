@@ -14,4 +14,9 @@ export const coursesRouter = createTRPCRouter({
         },
       });
     }),
+  getCourse: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.course.findUnique({ where: { id: input.id } });
+    }),
 });

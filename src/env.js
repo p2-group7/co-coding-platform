@@ -12,22 +12,22 @@ export const env = createEnv({
       .url()
       .refine(
         (str) => !str.includes("YOUR_MYSQL_URL_HERE"),
-        "You forgot to change the default URL"
+        "You forgot to change the default URL",
       ),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
-      NEXTAUTH_SECRET:
-       process.env.NODE_ENV === "production"
-         ? z.string()
-         : z.string().optional(),
-     NEXTAUTH_URL: z.preprocess(
-       // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
-       // Since NextAuth.js automatically uses the VERCEL_URL if present.
-       (str) => process.env.VERCEL_URL ?? str,
-       // VERCEL_URL doesn't include `https` so it cant be validated as a URL
-       process.env.VERCEL ? z.string() : z.string().url()
-     )
+    // NEXTAUTH_SECRET:
+    //   process.env.NODE_ENV === "production"
+    //     ? z.string()
+    //     : z.string().optional(),
+    //  NEXTAUTH_URL: z.preprocess(
+    //    // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
+    //    // Since NextAuth.js automatically uses the VERCEL_URL if present.
+    //    (str) => process.env.VERCEL_URL ?? str,
+    //    // VERCEL_URL doesn't include `https` so it cant be validated as a URL
+    //    process.env.VERCEL ? z.string() : z.string().url()
+    //  )
   },
 
   /**
@@ -47,8 +47,8 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL
+    // NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+    // NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

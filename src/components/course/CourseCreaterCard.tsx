@@ -1,11 +1,6 @@
 "use client";
 import {
   Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   Sheet,
@@ -17,7 +12,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
-  useFormField,
   Form,
   FormItem,
   FormLabel,
@@ -28,12 +22,10 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { string, z } from "zod";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/trpc/react";
-import { inferRouterInputs } from "@trpc/server";
-import { AppRouter } from "@/server/api/root";
 import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
@@ -51,9 +43,7 @@ const CourseCreatorCard = () => {
     },
   });
   const router = useRouter();
-  type RouterInput = inferRouterInputs<AppRouter>;
 
-  type getCourseCreateInput = RouterInput["course"]["create"];
   const createCourse = api.course.create.useMutation({
     onSuccess: () => {
       router.refresh();

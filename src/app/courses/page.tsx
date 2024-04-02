@@ -7,7 +7,7 @@ export default async function Courses() {
 
   const courseElements = course.map(function (course) {
     return (
-      <CourseCard key={course.id} nameShort={course.abrev} name={course.name} />
+      <CourseCard key={course.id} id={course.id} nameShort={course.abrev} name={course.name} />
     );
   });
 

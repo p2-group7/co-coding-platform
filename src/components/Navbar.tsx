@@ -2,7 +2,6 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,7 +9,6 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
 const menuComponents: { title: string; href: string; description: string }[] = [
@@ -64,7 +62,7 @@ export function NavigationMenuDemo({ groups }: { groups: GroupInfo[] }) {
                   <NavigationMenuLink asChild>
                     <a
                       className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                      href="/"
+                      href="/courses"
                     >
                       <div className="mb-2 mt-4 text-lg font-medium">
                         Your Courses
@@ -75,7 +73,7 @@ export function NavigationMenuDemo({ groups }: { groups: GroupInfo[] }) {
                     </a>
                   </NavigationMenuLink>
                 </li>
-                <ListItem href="/exercise-menu" title="IMPR">
+                <ListItem href="/courses/IMPR" title="IMPR">
                   Imperative Programming
                 </ListItem>
                 <ListItem href="/docs/installation" title="ALG">
