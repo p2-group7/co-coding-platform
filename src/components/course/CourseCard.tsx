@@ -17,7 +17,7 @@ type CourseCardProps = {
 const CourseCard: React.FC<CourseCardProps> = ({nameShort, name}) => {
   return (
     <ClickableCard href={"/courses/" + nameShort}>
-        <Card className="h-[140px] p-4 shadow-md rounded-md cursor-pointer hover:bg-slate-600">
+        <Card className="h-[140px] p-4 shadow-md rounded-md cursor-pointer hover:bg-secondary">
         <CardHeader>
             <CardTitle>{nameShort}</CardTitle>
             <CardDescription className="truncate">{name}</CardDescription>
