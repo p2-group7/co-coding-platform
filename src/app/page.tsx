@@ -16,7 +16,7 @@ export default async function Home() {
   const groups: GroupInfo[] = groupsData.map((group: GetGroupsOutput[0]) => ({
     id: group.id,
     name: group.name,
-    href: `/codespace`,
+    href: `/codespace/` + group.id,
   }));
   return (
     <main>

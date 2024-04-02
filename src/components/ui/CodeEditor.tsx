@@ -3,73 +3,86 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Y from "yjs";
+// @ts-expect-error decleration file for this is wrong, but works
+import { yCollab } from "y-codemirror.next";
 import { WebsocketProvider } from "y-websocket";
-import { MonacoBinding } from "y-monaco";
-import * as monaco from "monaco-editor";
-import Editor, { Monaco } from "@monaco-editor/react";
+import { EditorView, basicSetup } from "codemirror";
+import { EditorState } from "@codemirror/state";
+import { javascript } from "@codemirror/lang-javascript";
+import RandomColor from "randomcolor";
+import { oneDark } from "@codemirror/theme-one-dark";
 
 interface CodeEditorProps {
   roomId: string;
+  username: string;
 }
 
-// https://github.com/yjs/y-webrtc?tab=readme-ov-file
-export default function CodeEditor({ roomId }: CodeEditorProps) {
-  const editorRef: React.MutableRefObject<
-    // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
-    monaco.editor.IStandaloneCodeEditor | undefined
-  > = useRef<monaco.editor.IStandaloneCodeEditor>();
+export default function CodeEditor({ roomId, username }: CodeEditorProps) {
+  const editorRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Editor value -> YJS Text value (A text value shared by multiple people)
-  // One person deletes text -> Deletes from the overall shared text value
-  // Handled by YJS
-
-  // Initialize YJS, tell it to listen to our Monaco instance for changes.
-
-  function handleEditorDidMount(
-    editor: monaco.editor.IStandaloneCodeEditor,
-    monaco: Monaco,
-  ) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    editorRef.current = editor;
-    // Initialize YJS
+  useEffect(() => {
     const doc = new Y.Doc(); // a collection of shared objects -> Text
-    // Connect to peers (or start connection) with WebRTC
-    const provider = new WebsocketProvider(
+
+    let webrtcprovider: WebsocketProvider | null = null;
+    // Connect to peers (or start connection) with websocket
+    webrtcprovider = new WebsocketProvider(
       "wss://y-websocket-xwh3.onrender.com",
       roomId,
       doc,
-      //{ WebSocketPolyfill: require("ws") },
     );
-    const type = doc.getText("monaco"); // doc { "monaco": "what our IDE is showing" }
-    // Bind YJS to Monaco
-    const editorModel = editorRef.current.getModel();
 
-    if (editorModel !== null) {
-      const binding = new MonacoBinding(
-        type,
-        editorModel,
-        new Set([editorRef.current]),
-        provider.awareness,
-      );
-    }
-    console.log(provider.awareness);
-  }
-  // TODO DO PROPER ERROR HANDLING
-  if (roomId === undefined) {
-    return <div>Loading...</div>;
-  } else {
-    return (
-      <div style={{ left: "85px", top: "0px", position: "absolute" }}>
-        <Editor
-          height="100vh"
-          width="90vw"
-          theme="vs-dark"
-          defaultLanguage="c"
-          onMount={handleEditorDidMount}
-        />
+    // Listen to sync events and only update the editor when the sync is complete
+    webrtcprovider.on("sync", (event: boolean) => {
+      console.log(event);
+      setLoading(false);
+    });
+
+    const yText = doc.getText("codemirror");
+
+    const yUndoManager = new Y.UndoManager(yText);
+
+    // TODO fix to be current user and a random color
+    webrtcprovider.awareness.setLocalStateField("user", {
+      name: username,
+      color: RandomColor(),
+    });
+
+    const state = EditorState.create({
+      // eslint-disable-next-line @typescript-eslint/no-base-to-string
+      doc: yText.toString(),
+      extensions: [
+        basicSetup,
+        javascript(),
+        oneDark,
+        yCollab(yText, webrtcprovider.awareness, {
+          yUndoManager,
+        }),
+      ],
+    });
+
+    const editorRefEelement: Element = editorRef.current as Element;
+    const view = new EditorView({
+      state,
+      parent: editorRefEelement,
+    });
+    return () => {
+      view.destroy();
+      if (webrtcprovider) {
+        webrtcprovider.disconnect();
+        doc.destroy();
+      }
+    };
+  }, [roomId]);
+
+  return (
+    <div>
+      <div className="flex justify-center" hidden={!loading}>
+        <p hidden={!loading}>Loading...</p>
       </div>
-    );
-  }
+      <div ref={editorRef} id="editor" hidden={loading}></div>
+    </div>
+  );
 }

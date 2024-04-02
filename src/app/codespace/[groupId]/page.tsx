@@ -4,8 +4,13 @@ import Navbar from "@/components/Navbar";
 import type { GroupInfo } from "@/components/Navbar";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/server/api/root";
+import { useRouter } from "next/router";
 
-export default async function Home() {
+export default async function Home({
+  params,
+}: {
+  params: { groupId: string };
+}) {
   type RouterOutput = inferRouterOutputs<AppRouter>;
 
   type GetGroupsOutput = RouterOutput["group"]["getGroups"];
@@ -14,8 +19,18 @@ export default async function Home() {
 
   // Make a database call to fetch groups data
   const groupsData: GetGroupsOutput = await api.group.getGroups();
-  const username: GetCurrentUserOutput = await api.get.getCurrentUser(1); // todo update to user id
-  const usernameString = username?.username ? username.username : "Anonymous";
+  const user: GetCurrentUserOutput = await api.get.getCurrentUser(1); // todo update to user id
+  const usernameString = user?.username ? user.username : "Anonymous";
+
+  if (user?.groupId !== Number(params.groupId)) {
+    return (
+      <div>
+        <p>
+          You are not in this group. Go <a href="/">back</a> to the group page.
+        </p>
+      </div>
+    );
+  }
 
   const group: GetGroupOutput = await api.group.getGroup(1);
   const groupRoomId = group?.roomId ? group.roomId : "testtt";
@@ -31,6 +46,7 @@ export default async function Home() {
       <div>
         <Navbar groups={groups} /> {/* Pass groups data to Navbar component */}
       </div>
+      <p>KAGEEEEEEE {params.groupId}</p>
       <div>
         <CodeEditor roomId={groupRoomId} username={usernameString} />
       </div>
