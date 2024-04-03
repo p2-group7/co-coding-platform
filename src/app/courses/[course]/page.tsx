@@ -3,6 +3,7 @@ import { api } from "@/trpc/server";
 import React from "react";
 import CreateLectureCard from "@/components/course/CreateLectureCard";
 
+
 export default async function page({ params }: { params: { course: string } }) {
   const course = await api.course.getCourse({ id: Number(params.course) });
   if (course === null) {
@@ -36,6 +37,8 @@ export default async function page({ params }: { params: { course: string } }) {
         {lectureElements}
         <CreateLectureCard course={course.id} />
       </div>
+
+
     </div>
   );
 }
