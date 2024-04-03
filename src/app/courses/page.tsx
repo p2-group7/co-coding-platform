@@ -1,18 +1,24 @@
 import { api } from "@/trpc/server";
-import CourseCard from "@/components/course/CourseCard";
+import InfoCard from "@/components/course/CourseCard";
 import CourseCreatorCard from "@/components/course/CourseCreaterCard";
 
 export default async function Courses() {
   const course = await api.get.getCourses();
 
   const courseElements = course.map(function (course) {
+    const hrefStr = "/courses/" + course.id.toString();
     return (
-      <CourseCard key={course.id} id={course.id} nameShort={course.abrev} name={course.name} />
+      <InfoCard
+        key={course.id}
+        href={hrefStr}
+        nameShort={course.abrev}
+        name={course.name}
+      />
     );
   });
 
   return (
-    <div className="grid grid-cols-3 gap-4 m-10">
+    <div className="m-10 grid grid-cols-3 gap-4">
       {courseElements}
       <CourseCreatorCard />
     </div>

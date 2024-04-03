@@ -1,4 +1,4 @@
-import CourseCard from "@/components/course/CourseCard";
+import InfoCard from "@/components/course/CourseCard";
 import { api } from "@/trpc/server";
 import React from "react";
 import CreateLectureCard from "@/components/course/CreateLectureCard";
@@ -12,10 +12,12 @@ export default async function page({ params }: { params: { course: string } }) {
   const lectures = await api.lecture.getAll(course.id);
 
   const lectureElements = lectures.map(function (lecture) {
+    const hrefString =
+      "/courses/" + course.id.toString() + "/lectures/" + lecture.id.toString();
     return (
-      <CourseCard
+      <InfoCard
         key={lecture.id}
-        id={lecture.id}
+        href={hrefString}
         nameShort={lecture.name}
         name={lecture.description ?? "N/A"}
       />

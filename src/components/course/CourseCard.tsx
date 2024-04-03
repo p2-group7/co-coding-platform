@@ -3,27 +3,27 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 import ClickableCard from "../ui/clickableCard";
 
-type CourseCardProps = {
-  id: number;
+type InfoCardProps = {
+  href: string;
   nameShort: string;
   name: string;
 };
 
-const CourseCard: React.FC<CourseCardProps> = ({id, nameShort, name}) => {
+const InfoCard: React.FC<InfoCardProps> = ({ href, nameShort, name }) => {
   return (
-    <ClickableCard href={"/courses/" + id}>
-        <Card className="h-[140px] p-4 shadow-md rounded-md cursor-pointer hover:bg-secondary">
+    <ClickableCard href={href}>
+      <Card className="h-[140px] cursor-pointer rounded-md p-4 shadow-md hover:bg-secondary">
         <CardHeader>
-            <CardTitle>{nameShort}</CardTitle>
-            <CardDescription className="truncate">{name}</CardDescription>
+          <CardTitle>{nameShort}</CardTitle>
+          <CardDescription className="truncate">{name}</CardDescription>
         </CardHeader>
-        </Card>
+      </Card>
     </ClickableCard>
-  )
-}
+  );
+};
 
-export default CourseCard
+export default InfoCard;
