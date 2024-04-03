@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { z } from "zod";
+import { number, z } from "zod";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/trpc/react";
@@ -31,16 +31,18 @@ const FormSchema = z.object({
   lectureName: z.string().min(2, {
     message: "Lecture name must be at least 2 characters.",
   }),
-  description: z.string().min(1),
 });
 
+type CreateLectureCardProps = {
+  course: number;
+};
+
 // Changed here
-const CreateLectureCard = () => {
+const CreateLectureCard: React.FC<CreateLectureCardProps> = ({ course }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       lectureName: "",
-      description: "",
     },
   });
   const router = useRouter();
@@ -52,7 +54,12 @@ const CreateLectureCard = () => {
   });
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
-    createLecture.mutate(values);
+    const data = {
+      lectureName: values.lectureName,
+      courseId: course,
+    };
+
+    createLecture.mutate(data);
   }
 
   return (
@@ -81,38 +88,14 @@ const CreateLectureCard = () => {
                       <FormLabel>Lecture name</FormLabel>{" "}
                       {/* Changed label text */}
                       <FormControl>
-                        <textarea
-                        placeholder=""
-                        {...field}
-                        className="h-10 w-full resize-none rounded-md border p-2"
-                        />
-
-
+                        <Input placeholder="" {...field} />
                       </FormControl>
                       <FormDescription></FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="description" // Change from "abrev" to "description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>{" "}
-                      {/* Changed label text */}
-                      <FormControl>
-                        <textarea
-                          placeholder=""
-                          {...field}
-                          className="h-36 w-full resize-none rounded-md border p-2"
-                        />
-                      </FormControl>
-                      <FormDescription></FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+
                 <SheetClose>
                   <Button type="submit">Submit</Button>
                 </SheetClose>
