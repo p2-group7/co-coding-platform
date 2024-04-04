@@ -1,6 +1,6 @@
 import { api } from "@/trpc/server";
 import InfoCard from "@/components/course/CourseCard";
-import CourseCreatorCard from "@/components/course/CourseCreaterCard";
+import CourseCreatorCard from "@/components/course/CreateCourseCard";
 
 export default async function Courses() {
   const course = await api.get.getCourses();
