@@ -5,7 +5,7 @@ interface ExerciseProps {
   ExsDescription: string;
 }
 
-const ExerciseBox: React.FC<ExerciseProps> = ({ ExsTitle, ExsDescription }) => {
+const ExerciseInfoBox: React.FC<ExerciseProps> = ({ ExsTitle, ExsDescription }) => {
   return (
     <div className="exercise">
       <h2>{ExsTitle}</h2>
@@ -14,4 +14,4 @@ const ExerciseBox: React.FC<ExerciseProps> = ({ ExsTitle, ExsDescription }) => {
   );
 };
 
-export default ExerciseBox;
+export default ExerciseInfoBox;
