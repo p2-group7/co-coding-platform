@@ -3,15 +3,15 @@ import { api } from "@/trpc/server";
 import React from "react";
 import CreateLectureCard from "@/components/course/CreateLectureCard";
 
-
+//This code will make sure we get the right course(by ID)
 export default async function page({ params }: { params: { course: string } }) {
   const course = await api.course.getCourse({ id: Number(params.course) });
   if (course === null) {
     return "You dont have access to this";
   }
 
+  //This code gets all lectures that are below a spesific course
   const lectures = await api.lecture.getAll(course.id);
-
   const lectureElements = lectures.map(function (lecture) {
     const hrefString =
       "/courses/" + course.id.toString() + "/lectures/" + lecture.id.toString();
@@ -24,6 +24,7 @@ export default async function page({ params }: { params: { course: string } }) {
       />
     );
   });
+
 
   return (
     <div className="container mx-auto px-1">
