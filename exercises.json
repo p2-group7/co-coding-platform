@@ -1,0 +1,24 @@
+[
+    {
+      "id": 1,
+      "title": "Calculate Average",
+      "description": "Write a function that calculates the average of an array of numbers.",
+      "exampleInput": [1, 2, 3, 4, 5],
+      "expectedOutput": 3
+    },
+    {
+      "id": 2,
+      "title": "Reverse String",
+      "description": "Write a function that reverses a string.",
+      "exampleInput": "hello",
+      "expectedOutput": "olleh"
+    },
+    {
+      "id": 3,
+      "title": "Factorial",
+      "description": "Write a function that calculates the factorial of a number.",
+      "exampleInput": 5,
+      "expectedOutput": 120
+    }
+  ]
+  
