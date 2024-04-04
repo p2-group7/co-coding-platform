@@ -28,7 +28,7 @@ import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   name: z.string().min(2, {
-    message: "Coursename must be at least 2 characters.",
+    message: "Course name must be at least 2 characters.",
   }),
   abrev: z.string().min(1).max(10),
 });
