@@ -16,11 +16,13 @@ export default async function page({
   }
 
   return (
-    <div className="bg:black h-screen">
-      <ExerciseInfoBox
-        ExsTitle={exercise.name}
-        ExsDescription={exercise.description ?? "No description"}
-      />
+    <div>
+      <div className="bg:black h-screen">
+        <ExerciseInfoBox
+          ExsTitle={exercise.name}
+          ExsDescription={exercise.description ?? "No description"}
+        />
+      </div>
     </div>
   );
 }

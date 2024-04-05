@@ -1,6 +1,5 @@
-"use client";
-
 import * as React from "react";
+import { Combobox } from "@/components/ui/combobox";
 
 export type ExerciseProps = {
   ExsTitle: string;
@@ -12,10 +11,11 @@ const ExerciseInfoBox: React.FC<ExerciseProps> = ({
   ExsDescription,
 }) => {
   return (
-    <div className="container mx-auto h-full md:w-1/3">
+    <div className="h-full w-full md:w-1/3">
       <div className="m-4 mb-4 h-full rounded-lg border border-transparent bg-secondary p-4">
         <h2 className="font-bold">{ExsTitle}</h2>
         <p>{ExsDescription}</p>
+        <Combobox /> {/* Render the Combobox component */}
       </div>
     </div>
   );
