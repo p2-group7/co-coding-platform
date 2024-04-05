@@ -8,7 +8,7 @@ export default async function Courses() {
   const courseElements = course.map(function (course) {
     const hrefStr = "/courses/" + course.id.toString();
 
-    // and this shows the courses as info cards
+    // this creates an array the courses as info cards
     return (
       <InfoCard
         key={course.id}
@@ -19,6 +19,7 @@ export default async function Courses() {
     );
   });
 
+  //and this display the courses
   return (
     <div className="m-10 grid grid-cols-3 gap-4">
       {courseElements}
