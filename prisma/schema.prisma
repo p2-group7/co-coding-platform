@@ -119,3 +119,22 @@ model Exercise {
   lectureId   Int
   lecture     Lecture @relation(fields: [lectureId], references: [id])
 }
+
+
+// Vil db push ødelægge det for andres db?
+
+// model Exercise {
+//   id          Int     @id @default(autoincrement())
+//   name        String
+//   description String?
+//   lectureId   Int
+//   lecture     Lecture @relation(fields: [lectureId], references: [id])
+//   tests       Test[]
+// }
+
+// model Test {
+//   id         Int      @id @default(autoincrement())
+//   name       String
+//   exerciseId Int
+//   exercise   Exercise @relation(fields: [exerciseId], references: [id])
+// }

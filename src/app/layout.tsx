@@ -11,7 +11,7 @@ import Navbar from "@/components/Navbar";
 import type { GroupInfo } from "@/components/Navbar";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/server/api/root";
-
+import ScrollAreaDemo from "@/components/codeSpace/testsuite";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,11 +24,9 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-  type RouterOutput = inferRouterOutputs<AppRouter>;
+type RouterOutput = inferRouterOutputs<AppRouter>;
 
-  type GetGroupsOutput = RouterOutput["group"]["getGroups"];
-
-
+type GetGroupsOutput = RouterOutput["group"]["getGroups"];
 
 export default async function RootLayout({
   children,
@@ -50,12 +48,15 @@ export default async function RootLayout({
       <body className={`font-sans ${inter.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <TRPCReactProvider>
-            
             <div className="flex flex-col">
               <div className="w-full">
-                <Navbar groups={groups} /> {/* Pass groups data to Navbar component */}
+                <Navbar groups={groups} />{" "}
+                {/* Pass groups data to Navbar component */}
               </div>
               {children}
+            </div>
+            <div>
+              <ScrollAreaDemo />
             </div>
           </TRPCReactProvider>
         </ThemeProvider>
