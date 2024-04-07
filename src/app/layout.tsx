@@ -11,7 +11,7 @@ import Navbar from "@/components/Navbar";
 import type { GroupInfo } from "@/components/Navbar";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/server/api/root";
-import ScrollAreaDemo from "@/components/codeSpace/testsuite";
+import ResizableDemo from "@/components/codeSpace/Resizable";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -55,8 +55,8 @@ export default async function RootLayout({
               </div>
               {children}
             </div>
-            <div>
-              <ScrollAreaDemo />
+            <div className="h-screen w-screen">
+              <ResizableDemo />
             </div>
           </TRPCReactProvider>
         </ThemeProvider>

@@ -4,24 +4,32 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 
-const tags = ["1: n > 5", "2: n > 30", "3: Compiled", "4: Test 4", "5: Test 5"];
+const tags = [
+  "1: n > 5",
+  "2: n > 30",
+  "3: Compiled",
+  "4: n > 100",
+  "5: n > 500",
+  "6: n > 1000",
+  "7: n > 5000",
+  "8: n > 10000",
+];
 
 export function ScrollAreaDemo() {
   return (
-    <ScrollArea className="w-80 rounded-md border bg-secondary">
-      <div className="p-4">
-        <h4 className="mb-4 text-sm font-medium leading-none">Tests</h4>
+    <div className="h-full w-full overflow-auto rounded-md border bg-secondary">
+      <div className="p-4 pb-2">
         {tags.map((tag) => (
-          <>
-            <div key={tag} className="flex justify-between">
+          <React.Fragment key={tag}>
+            <div className="flex items-center justify-between">
               <div>{tag}</div>
               <Button>Play</Button>
             </div>
             <Separator className="my-2" />
-          </>
+          </React.Fragment>
         ))}
       </div>
-    </ScrollArea>
+    </div>
   );
 }
 
