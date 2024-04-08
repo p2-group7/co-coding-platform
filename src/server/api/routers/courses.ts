@@ -14,6 +14,7 @@ export const coursesRouter = createTRPCRouter({
         },
       });
     }),
+  
   getCourse: publicProcedure
     .input(z.object({ id: z.number() }))
     .query(({ ctx, input }) => {

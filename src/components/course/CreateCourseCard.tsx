@@ -52,6 +52,7 @@ const CourseCreatorCard = () => {
   function onSubmit(values: z.infer<typeof FormSchema>) {
     createCourse.mutate(values);
   }
+  
   return (
     <Sheet>
       <SheetTrigger>
