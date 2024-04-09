@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { Toggle } from "@/components/ui/toggle";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
 
 
 const FormSchema = z.object({
@@ -23,12 +24,11 @@ const TextEditor = () => {
       description: ""
     },
   });
+  const [pressed, setPressed] = React.useState(true);
 
-  
   return (
     <Form {...form}>
-      <Toggle>Edit</Toggle>
-      <br /><br />
+      <Toggle pressed={pressed} onPressedChange={setPressed}>Edit</Toggle>
         <form className="text-white-700 rounded-lg border-2 border-secondary bg-secondary bg-gradient-to-b from-muted/50 to-muted p-6 text-lg no-underline outline-none focus:shadow-md">
         <FormField
             control={form.control}

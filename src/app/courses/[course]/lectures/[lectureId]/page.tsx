@@ -18,8 +18,8 @@ export default async function page({params}: {params: { lectureId: string };}) {
       <InfoCard
         key={exercise.id}
         href={hrefString}
-        nameShort={exercise.name}
-        name={exercise.description ?? "N/A"}
+        name={exercise.name}
+        nameShort={exercise.description ?? "N/A"}
       />
     );
   });

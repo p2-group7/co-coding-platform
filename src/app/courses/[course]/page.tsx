@@ -19,8 +19,8 @@ export default async function page({ params }: { params: { course: string } }) {
       <InfoCard
         key={lecture.id}
         href={hrefString}
-        nameShort={lecture.name}
-        name={lecture.description ?? "N/A"}
+        name={lecture.name}
+        nameShort={lecture.description ?? "N/A"}
       />
     );
   });
