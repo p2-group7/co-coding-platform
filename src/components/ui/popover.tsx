@@ -1,6 +1,4 @@
 //This file helps to make the list ov exerecises in the exercise page
-
-
 "use client"
 
 import * as React from "react"
