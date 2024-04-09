@@ -1,8 +1,8 @@
 import React from "react";
 import { api } from "@/trpc/server";
 import ExerciseInfoBox from "@/components/codeSpace/exerciseInfoBox";
-import { Button } from "@/components/ui/button";
-import { Combobox } from "@/components/ui/combobox";
+import ResizableDemo from "@/components/codeSpace/Resizable";
+
 
 export default async function page({
   params,
@@ -17,13 +17,8 @@ export default async function page({
   }
 
   return (
-    <div>
-      <div className="bg:black h-screen">
-        <ExerciseInfoBox
-          ExsTitle={exercise.name}
-          ExsDescription={exercise.description ?? "No description"}
-        />
-      </div>
+    <div className="h-screen w-screen m-1">
+      <ResizableDemo />
     </div>
   );
 }

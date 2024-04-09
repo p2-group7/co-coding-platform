@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { PlayIcon } from "@radix-ui/react-icons";
 
 const tags = [
   "1: n > 5",
@@ -17,13 +17,13 @@ const tags = [
 
 export function ScrollAreaDemo() {
   return (
-    <div className="h-full w-full overflow-auto rounded-md border bg-secondary">
-      <div className="p-4 pb-2">
+    <div className=" h-full w-full overflow-auto rounded-md border bg-secondary ">
+      <div className="p-4 pb-2 ">
         {tags.map((tag) => (
           <React.Fragment key={tag}>
             <div className="flex items-center justify-between">
               <div>{tag}</div>
-              <Button>Play</Button>
+              <Button className="bg-black font-bold"><PlayIcon /></Button>
             </div>
             <Separator className="my-2" />
           </React.Fragment>
