@@ -7,9 +7,9 @@ import ExerciseInfoBox from "./exerciseInfoBox";
 import { api } from "@/trpc/server";
 import CodeEditor from "../ui/CodeEditor";
 
-import ScrollAreaDemo from "./testsuite";
+import TestSuiteScrollArea from "./Testsuite";
 
-export async function ResizableDemo() {
+export async function Resizable() {
   const exercise = await api.exercise.getExercise({
     id: 1,
   });
@@ -54,7 +54,7 @@ export async function ResizableDemo() {
             >
               <ResizablePanel defaultSize={50}>
                 <div className="m-1 flex h-full items-stretch justify-center">
-                  <ScrollAreaDemo />
+                  <TestSuiteScrollArea />
                 </div>
               </ResizablePanel>
               <ResizableHandle />
@@ -71,4 +71,4 @@ export async function ResizableDemo() {
   );
 }
 
-export default ResizableDemo;
+export default Resizable;

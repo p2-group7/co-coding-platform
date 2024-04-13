@@ -15,7 +15,7 @@ const tags = [
   "8: n > 10000",
 ];
 
-export function ScrollAreaDemo() {
+export function testsuite() {
   return (
     <div className=" h-full w-full overflow-auto rounded-md border bg-secondary ">
       <div className="p-4 pb-2 ">
@@ -33,4 +33,4 @@ export function ScrollAreaDemo() {
   );
 }
 
-export default ScrollAreaDemo;
+export default testsuite;
