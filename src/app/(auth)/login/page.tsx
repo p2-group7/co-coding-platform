@@ -24,12 +24,16 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { setCookie } from "@/actions/cookies";
+import { redirect } from "next/navigation";
+import { login } from "@/lib/auth";
+import { NextResponse } from "next/server";
+import { useRouter } from "next/navigation"
 
 const FormSchema = z.object({
   username: z.string().min(2, {
     message: "username must be at least 2 characters",
   }),
-  password: z.string().min(5, {
+  password: z.string().min(3, {
     message: "password must be at least 5 characters",
   }),
 });
@@ -42,6 +46,7 @@ export default function LoginForm() {
       password: "",
     },
   });
+  const router = useRouter()
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     fetch("/api/auth", {
@@ -52,16 +57,15 @@ export default function LoginForm() {
       body: JSON.stringify(values),
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: any) => {
         console.log(data);
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        if (data.authorized === false) {
+        if (data === false) {
           form.setError("username", {
             type: "manual",
-            message: "Invalid username or password",
+            message: data.error,
           });
         } else {
-          setCookie("authorization", "true");
+          router.push("/");
         }
       })
       .catch((err) => {
