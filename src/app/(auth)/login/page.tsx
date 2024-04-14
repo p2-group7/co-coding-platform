@@ -22,7 +22,9 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import AlertDestructive from "@/components/AlertDestructive";
+import { Alert } from "@/components/ui/alert";
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -42,6 +44,22 @@ export default function LoginForm() {
     },
   });
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const error = searchParams.get("error");
+
+  let alert = undefined;
+  if (error) {
+    let desc = "Something went wrong";
+    if (error === "sessionExp") {
+      desc = "Your session has expired. Please login again.";
+    }
+    alert = (
+      <div className="m-6">
+        <AlertDestructive error="Error!" description={desc} />
+      </div>
+    );
+  }
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     fetch("/api/auth", {
@@ -71,55 +89,58 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <Card className="w-full max-w-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Enter your username and password below to login to your account.
-          </CardDescription>
-        </CardHeader>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-6"
-          >
-            <CardContent className="grid gap-4">
-              <FormField
-                control={form.control}
-                name="username" // Change from "name" to "lectureName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel> {/* Changed label text */}
-                    <FormControl>
-                      <Input placeholder="" {...field} />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password" // Change from "name" to "lectureName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel> {/* Changed label text */}
-                    <FormControl>
-                      <Input placeholder="" {...field} />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full">Sign in</Button>
-            </CardFooter>
-          </form>
-        </Form>
-      </Card>
+    <div>
+      {alert ?? null}
+      <div className="flex h-screen items-center justify-center">
+        <Card className="w-full max-w-sm">
+          <CardHeader>
+            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardDescription>
+              Enter your username and password below to login to your account.
+            </CardDescription>
+          </CardHeader>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="w-full space-y-6"
+            >
+              <CardContent className="grid gap-4">
+                <FormField
+                  control={form.control}
+                  name="username" // Change from "name" to "lectureName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Username</FormLabel> {/* Changed label text */}
+                      <FormControl>
+                        <Input placeholder="" {...field} />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password" // Change from "name" to "lectureName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel> {/* Changed label text */}
+                      <FormControl>
+                        <Input placeholder="" {...field} />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+              <CardFooter>
+                <Button className="w-full">Sign in</Button>
+              </CardFooter>
+            </form>
+          </Form>
+        </Card>
+      </div>
     </div>
   );
 }
