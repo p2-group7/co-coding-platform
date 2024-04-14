@@ -1,28 +1,33 @@
 import { PrismaClient } from "@prisma/client";
 import { cookies } from "next/headers";
-import { sign, verify } from "jsonwebtoken";
+import { JWTPayload, jwtVerify, SignJWT } from "jose";
 
 type User = {
   username: string;
   password: string;
 };
 
-const secret = "secret";
+const secretString = "secret";
+const secret = new TextEncoder().encode(secretString);
+const algorithm = "HS256";
 const expiryTime = 60 * 5;
 
-async function encrypt(user: User, expiresIn: number) {
+// based on https://github.com/balazsorban44/auth-poc-next/blob/main/lib.ts
+
+async function encrypt(payload: JWTPayload, expiryDate: Date) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  const token = sign(user, secret, {
-    algorithm: "HS256",
-    expiresIn: expiresIn,
-  });
+  const token = await new SignJWT(payload)
+    .setProtectedHeader({ alg: algorithm })
+    .setIssuedAt()
+    .setExpirationTime(expiryDate)
+    .sign(secret);
   return token;
 }
-export async function decrypt(input: string): Promise<any> {
-  const result = verify(input, secret, {
-    algorithms: ["HS256"],
+export async function decrypt(input: string) {
+  const { payload, protectedHeader } = await jwtVerify(input, secret, {
+    algorithms: [algorithm],
   });
-  return result;
+  return payload;
 }
 
 export async function login(user: User) {
@@ -31,10 +36,11 @@ export async function login(user: User) {
   }
 
   const isAuthorized = await checkUserCredentials(user.username, user.password);
-  console.log(isAuthorized);
 
   if (isAuthorized) {
-    const session = await encrypt(user, expiryTime);
+    const expires = new Date();
+    expires.setSeconds(expires.getSeconds() + expiryTime);
+    const session = await encrypt({ user, expires }, expires);
     cookies().set("session", session, { httpOnly: true });
     return true;
   } else {
@@ -51,7 +57,6 @@ export async function getSession() {
 const prisma = new PrismaClient();
 async function checkUserCredentials(username: string, password: string) {
   try {
-    console.log("Checking user credentials");
     const user = await prisma.user.findUnique({
       where: {
         username: username,

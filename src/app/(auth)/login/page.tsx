@@ -19,15 +19,10 @@ import {
   FormField,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { setCookie } from "@/actions/cookies";
-import { redirect } from "next/navigation";
-import { login } from "@/lib/auth";
-import { NextResponse } from "next/server";
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -46,7 +41,7 @@ export default function LoginForm() {
       password: "",
     },
   });
-  const router = useRouter()
+  const router = useRouter();
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     fetch("/api/auth", {
@@ -58,7 +53,6 @@ export default function LoginForm() {
     })
       .then((res) => res.json())
       .then((data: any) => {
-        console.log(data);
         if (data === false) {
           form.setError("username", {
             type: "manual",
