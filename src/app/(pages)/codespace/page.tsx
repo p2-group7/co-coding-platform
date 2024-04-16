@@ -9,6 +9,8 @@ export default async function Home() {
   type GetGroupOutput = RouterOutput["group"]["getGroup"];
   type GetCurrentUserOutput = RouterOutput["get"]["getCurrentUser"];
 
+  // TODO: Make user data based on session and not placeholder data. Consider using a context for this
+
   // Make a database call to fetch groups data
   const username: GetCurrentUserOutput = await api.get.getCurrentUser(1); // todo update to user id
   const usernameString = username?.username ? username.username : "Anonymous";
