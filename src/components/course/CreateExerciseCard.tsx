@@ -28,26 +28,26 @@ import { useRouter } from "next/navigation";
 
 // Changed here
 const FormSchema = z.object({
-  lectureName: z.string().min(2, {
-    message: "Lecture name must be at least 2 characters.",
+  exerciseName: z.string().min(2, {
+    message: "Exercise name must be at least 2 characters.",
   }),
 });
 
-type CreateLectureCardProps = {
-  course: number;
+type CreateExerciseCardProps = {
+  lecture: number;
 };
 
 // Changed here
-const CreateLectureCard: React.FC<CreateLectureCardProps> = ({ course }) => {
+const CreateExerciseCard: React.FC<CreateExerciseCardProps> = ({ lecture }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      lectureName: "",
+      exerciseName: "",
     },
   });
   const router = useRouter();
 
-  const createLecture = api.lecture.create.useMutation({
+  const createExercise = api.exercise.create.useMutation({
     onSuccess: () => {
       router.refresh();
     },
@@ -55,11 +55,11 @@ const CreateLectureCard: React.FC<CreateLectureCardProps> = ({ course }) => {
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     const data = {
-      lectureName: values.lectureName,
-      courseId: course,
+      exerciseName: values.exerciseName,
+      lectureId: lecture,
     };
 
-    createLecture.mutate(data);
+    createExercise.mutate(data);
   }
 
   return (
@@ -73,7 +73,7 @@ const CreateLectureCard: React.FC<CreateLectureCardProps> = ({ course }) => {
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Create Lecture</SheetTitle>
+          <SheetTitle>Create Exercise</SheetTitle>
           <SheetDescription>
             <Form {...form}>
               <form
@@ -82,10 +82,10 @@ const CreateLectureCard: React.FC<CreateLectureCardProps> = ({ course }) => {
               >
                 <FormField
                   control={form.control}
-                  name="lectureName" // Change from "name" to "lectureName"
+                  name="exerciseName" // Change from "name" to "lectureName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Lecture name</FormLabel>{" "}
+                      <FormLabel>Exercise name</FormLabel>{" "}
                       {/* Changed label text */}
                       <FormControl>
                         <Input placeholder="" {...field} />
@@ -108,4 +108,4 @@ const CreateLectureCard: React.FC<CreateLectureCardProps> = ({ course }) => {
   );
 };
 
-export default CreateLectureCard;
+export default CreateExerciseCard;
