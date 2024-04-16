@@ -1,14 +1,21 @@
+import "@/styles/globals.css";
+
 import { api } from "@/trpc/server";
 import Navbar from "@/components/Navbar";
 import type { GroupInfo } from "@/components/Navbar";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/server/api/root";
 
-export default async function Home() {
-  type RouterOutput = inferRouterOutputs<AppRouter>;
 
-  type GetGroupsOutput = RouterOutput["group"]["getGroups"];
+type RouterOutput = inferRouterOutputs<AppRouter>;
 
+type GetGroupsOutput = RouterOutput["group"]["getGroups"];
+
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   // Make a database call to fetch groups data
   const groupsData: GetGroupsOutput = await api.group.getGroups();
 
@@ -18,11 +25,13 @@ export default async function Home() {
     name: group.name,
     href: `/codespace/` + group.id,
   }));
+
   return (
-    <main>
-      <div>
+    <div>
+      <div className="w-full">
         <Navbar groups={groups} /> {/* Pass groups data to Navbar component */}
       </div>
-    </main>
+      {children}
+    </div>
   );
 }

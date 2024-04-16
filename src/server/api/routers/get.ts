@@ -10,4 +10,14 @@ export const getRouter = createTRPCRouter({
       },
     });
   }),
+  getCourses: publicProcedure.query(async ({ ctx }) => {
+    return ctx.db.course.findMany();
+  }),
+  getuser: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    return ctx.db.user.findUnique({
+      where: {
+        username: input,
+      },
+    });
+  }),
 });

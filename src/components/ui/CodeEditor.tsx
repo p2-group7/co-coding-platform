@@ -75,7 +75,7 @@ export default function CodeEditor({ roomId, username }: CodeEditorProps) {
         doc.destroy();
       }
     };
-  }, [roomId]);
+  }, [roomId, username]);
 
   return (
     <div>

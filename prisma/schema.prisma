@@ -1,36 +1,67 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-    id       Int    @id @default(autoincrement())
-    username String
-    password String
-    group    Group  @relation(fields: [groupId], references: [id])
-    groupId  Int
+  id        Int              @id @default(autoincrement())
+  username  String           @unique
+  password  String
+  groupId   Int
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  group     Group            @relation(fields: [groupId], references: [id])
+  courses   UsersOnCourses[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@index([username])
+  @@index([username])
 }
 
 model Group {
-    id      Int    @id @default(autoincrement())
-    name    String
-    members User[]
-    roomId  String @default(uuid())
+  id        Int      @id @default(autoincrement())
+  name      String
+  roomId    String   @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  members   User[]
 
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+  @@index([name])
+}
 
-    @@index([name])
+model Course {
+  id          Int              @id @default(autoincrement())
+  name        String
+  abrev       String
+  description String?
+  lectures    Lecture[]
+  users       UsersOnCourses[]
+}
+
+model UsersOnCourses {
+  userId   Int
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
+  user     User   @relation(fields: [userId], references: [id])
+
+  @@id([userId, courseId])
+}
+
+model Lecture {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  courseId    Int
+  exercises   Exercise[]
+  course      Course     @relation(fields: [courseId], references: [id])
+}
+
+model Exercise {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  lectureId   Int
+  lecture     Lecture @relation(fields: [lectureId], references: [id])
 }
