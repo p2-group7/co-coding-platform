@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import AlertDestructive from "@/components/AlertDestructive";
 import { Alert } from "@/components/ui/alert";
+import { JsonObject } from "@prisma/client/runtime/library";
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -70,17 +71,17 @@ export default function LoginForm() {
       body: JSON.stringify(values),
     })
       .then((res) => res.json())
-      .then((data: any) => {
-        if (data === false) {
+      .then((data: JsonObject) => {
+        if (data.authorized === false) {
           form.setError("username", {
             type: "manual",
-            message: data.error,
+            message: "Wrong username or password",
           });
         } else {
           router.push("/");
         }
       })
-      .catch((err) => {
+      .catch((error) => {
         form.setError("username", {
           type: "manual",
           message: "Something went wrong",

@@ -13,9 +13,9 @@ export async function POST(req: NextApiRequest) {
       password: json.password,
     });
     if (result === true) {
-      return NextResponse.json({ data: true });
+      return NextResponse.json({ authorized: true });
     } else {
-      NextResponse.json({ data: false });
+      return NextResponse.json({ authorized: false });
     }
   } catch (error) {
     console.log("Error in login");
