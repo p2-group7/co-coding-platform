@@ -24,8 +24,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import AlertDestructive from "@/components/AlertDestructive";
-import { Alert } from "@/components/ui/alert";
-import { JsonObject } from "@prisma/client/runtime/library";
+import { type JsonObject } from "@prisma/client/runtime/library";
+import { Suspense } from "react";
 
 const FormSchema = z.object({
   username: z.string().min(2, {
@@ -44,23 +44,27 @@ export default function LoginForm() {
       password: "",
     },
   });
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const error = searchParams.get("error");
+  const Alert = () => {
+    const searchParams = useSearchParams();
 
-  let alert = undefined;
-  if (error) {
-    let desc = "Something went wrong";
-    if (error === "sessionExp") {
-      desc = "Your session has expired. Please login again.";
+    const error = searchParams.get("error");
+
+    if (error) {
+      let desc = "Something went wrong";
+      if (error === "sessionExp") {
+        desc = "Your session has expired. Please login again.";
+      }
+      return (
+        <div className="m-6">
+          <AlertDestructive error="Error!" description={desc} />
+        </div>
+      );
+    } else {
+      return null;
     }
-    alert = (
-      <div className="m-6">
-        <AlertDestructive error="Error!" description={desc} />
-      </div>
-    );
-  }
+  };
+  const router = useRouter();
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     fetch("/api/auth", {
@@ -86,12 +90,15 @@ export default function LoginForm() {
           type: "manual",
           message: "Something went wrong",
         });
+        console.error(error);
       });
   }
 
   return (
     <div>
-      {alert ?? null}
+      <Suspense>
+        <Alert />
+      </Suspense>
       <div className="flex h-screen items-center justify-center">
         <Card className="w-full max-w-sm">
           <CardHeader>

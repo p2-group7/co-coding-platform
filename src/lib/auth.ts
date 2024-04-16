@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { cookies } from "next/headers";
-import { JWTPayload, jwtVerify, SignJWT } from "jose";
+import { type JWTPayload, jwtVerify, SignJWT } from "jose";
 
 type User = {
   username: string;
@@ -24,7 +24,7 @@ async function encrypt(payload: JWTPayload, expiryDate: Date) {
   return token;
 }
 export async function decrypt(input: string) {
-  const { payload, protectedHeader } = await jwtVerify(input, secret, {
+  const { payload } = await jwtVerify(input, secret, {
     algorithms: [algorithm],
   });
   return payload;

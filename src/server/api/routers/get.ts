@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { cookies } from "next/headers";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
