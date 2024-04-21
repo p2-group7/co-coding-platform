@@ -2,7 +2,8 @@ import InfoCard from "@/components/course/CourseCard";
 import { api } from "@/trpc/server";
 import React from "react";
 import CreateLectureCard from "@/components/course/CreateLectureCard";
-import TextEditor from "@/components/course/EditTextToggle";
+import EditDescript from "@/components/course/DescriptionEditor";
+
 
 export default async function page({ params }: { params: { course: string } }) {
   const course = await api.course.getCourse({ id: Number(params.course) });
@@ -31,7 +32,7 @@ export default async function page({ params }: { params: { course: string } }) {
       {/* <p className="text-white-700 rounded-lg border-2 border-secondary bg-secondary bg-gradient-to-b from-muted/50 to-muted p-6 text-lg no-underline outline-none focus:shadow-md">
         {course?.description}
       </p> */}
-      <TextEditor/>
+      <EditDescript/>
       <br></br>
       <h1 className="pt-10 text-5xl">Course Lectures</h1>
       <div className="m-10 grid grid-cols-5 gap-4">

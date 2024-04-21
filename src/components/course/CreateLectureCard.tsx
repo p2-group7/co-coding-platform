@@ -26,6 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 
+
 // Changed here
 const FormSchema = z.object({
   lectureName: z.string().min(2, {
