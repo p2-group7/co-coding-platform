@@ -6,15 +6,14 @@ import {
 import ExerciseInfoBox from "./exerciseInfoBox";
 import { api } from "@/trpc/server";
 import CodeEditor from "../ui/CodeEditor";
-
 import TestSuiteScrollArea from "./Testsuite";
-
+// Gets exercise 1 as the default exercise.
 export async function Resizable() {
   const exercise = await api.exercise.getExercise({
     id: 1,
   });
   if (exercise === null) {
-    return "You dont have access to this";
+    return "You dont have access to this exercise";
   }
   // codeeditor
   type RouterOutput = inferRouterOutputs<AppRouter>;
@@ -27,7 +26,7 @@ export async function Resizable() {
   const usernameString = username?.username ? username.username : "Anonymous";
 
   const group: GetGroupOutput = await api.group.getGroup(1);
-  const groupRoomId = group?.roomId ? group.roomId : "testtt";
+  const groupRoomId = group?.roomId ? group.roomId : "test";
   return (
     <ResizablePanelGroup direction="horizontal" className="h-screen w-screen">
       <ResizablePanel defaultSize={50}>
@@ -43,7 +42,7 @@ export async function Resizable() {
         <ResizablePanelGroup direction="vertical" className="h-full w-full">
           <ResizablePanel defaultSize={50}>
             <div className="m-1">
-              <CodeEditor roomId={groupRoomId} username={usernameString} />
+              <CodeEditor roomId={groupRoomId as string} username={usernameString as string} />
             </div>
           </ResizablePanel>
           <ResizableHandle />

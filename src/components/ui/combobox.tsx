@@ -7,16 +7,23 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 import { CommandList } from "cmdk";
 import { api } from "@/trpc/react";
+import { cn } from "@/lib/utils";
 
 // Interface for an exercise object
-interface Exercise {
+export interface Exercise {
   value: string;
   label: string;
 }
-// btw this is mostly chantGPT. I think the problem is still fetching the exercies line 26-43 
+// btw this is mostly chatGPT. I think the problem is still fetching the exercies line 26-43
 
 // Combobox component that fetches and displays exercises
 export function Combobox({ lectureId }: { lectureId: number }) {
@@ -43,9 +50,6 @@ export function Combobox({ lectureId }: { lectureId: number }) {
     }
   }, [lectureId]);
 
-
-
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -57,7 +61,9 @@ export function Combobox({ lectureId }: { lectureId: number }) {
           className="w-[250px] justify-between"
         >
           {/* Display selected exercise or default message */}
-          {value ? exercises.find(exercise => exercise.value === value)?.label : "Select Exercise"}
+          {value
+            ? exercises.find((exercise) => exercise.value === value)?.label
+            : "Select Exercise"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -71,11 +77,11 @@ export function Combobox({ lectureId }: { lectureId: number }) {
           <CommandGroup>
             <CommandList>
               {/* Iterate over exercises and render each as an option */}
-              {exercises.map(exercise => (
+              {exercises.map((exercise) => (
                 <CommandItem
                   key={exercise.value}
                   value={exercise.value}
-                  onSelect={currentValue => {
+                  onSelect={(currentValue) => {
                     // Update selected exercise when clicked
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false); // Close the popover
