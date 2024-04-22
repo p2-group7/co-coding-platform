@@ -15,40 +15,25 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { CommandList } from "cmdk";
-import { api } from "@/trpc/react";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "@/server/api/root";
 import { cn } from "@/lib/utils";
 
-// Interface for an exercise object
-export interface Exercise {
-  value: string;
-  label: string;
-}
-// btw this is mostly chatGPT. I think the problem is still fetching the exercies line 26-43
+type RouterOutput = inferRouterOutputs<AppRouter>;
 
-// Combobox component that fetches and displays exercises
-export function Combobox({ lectureId }: { lectureId: number }) {
+type exercises = RouterOutput["exercise"]["getAllExercises"];
+type exercise_id = exercises[0]["id"];
+
+// Combobox that displays exercises
+export function Combobox({
+  exercises,
+  selected,
+}: {
+  exercises: exercises;
+  selected?: exercise_id;
+}) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
-  const [exercises, setExercises] = React.useState<Exercise[]>([]);
-
-  // Fetch exercises belonging to the lecture
-  React.useEffect(() => {
-    async function fetchExercises() {
-      try {
-        // Call the API to fetch exercises by lectureId
-        const fetchedExercises = await api.exercises.getByLectureId(lectureId);
-        // Update the state with fetched exercises
-        setExercises(fetchedExercises);
-      } catch (error) {
-        console.error("Error fetching exercises:", error);
-      }
-    }
-
-    // Fetch exercises only if lectureId is provided
-    if (lectureId) {
-      fetchExercises();
-    }
-  }, [lectureId]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -61,8 +46,8 @@ export function Combobox({ lectureId }: { lectureId: number }) {
           className="w-[250px] justify-between"
         >
           {/* Display selected exercise or default message */}
-          {value
-            ? exercises.find((exercise) => exercise.value === value)?.label
+          {selected
+            ? exercises.find((exercise) => exercise.id === selected)?.name
             : "Select Exercise"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -79,8 +64,8 @@ export function Combobox({ lectureId }: { lectureId: number }) {
               {/* Iterate over exercises and render each as an option */}
               {exercises.map((exercise) => (
                 <CommandItem
-                  key={exercise.value}
-                  value={exercise.value}
+                  key={exercise.id}
+                  value={exercise.name}
                   onSelect={(currentValue) => {
                     // Update selected exercise when clicked
                     setValue(currentValue === value ? "" : currentValue);
@@ -88,13 +73,13 @@ export function Combobox({ lectureId }: { lectureId: number }) {
                   }}
                 >
                   {/* Display exercise label */}
-                  <Check
+                  {/* <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === exercise.value ? "opacity-100" : "opacity-0",
+                      value === selected ? "opacity-100" : "opacity-0",
                     )}
-                  />
-                  {exercise.label}
+                  /> */}
+                  {exercise.description}
                 </CommandItem>
               ))}
             </CommandList>

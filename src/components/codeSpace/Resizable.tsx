@@ -3,24 +3,28 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
-import ExerciseInfoBox from "./exerciseInfoBox";
-import { api } from "@/trpc/server";
+import ExerciseInfoBox from "./ExerciseInfoBox";
 import CodeEditor from "../ui/CodeEditor";
 import TestSuiteScrollArea from "./Testsuite";
+
+import { api } from "@/trpc/server";
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "@/server/api/root";
+
+type RouterOutput = inferRouterOutputs<AppRouter>;
+
+type GetGroupOutput = RouterOutput["group"]["getGroup"];
+type GetCurrentUserOutput = RouterOutput["get"]["getCurrentUser"];
+
 // Gets exercise 1 as the default exercise.
-export async function Resizable() {
+export async function Resizable({ exerciseId }: { exerciseId: number }) {
   const exercise = await api.exercise.getExercise({
-    id: 1,
+    id: exerciseId,
   });
   if (exercise === null) {
-    return "You dont have access to this exercise";
+    return <div>You dont have access to this exercise</div>;
   }
   // codeeditor
-  type RouterOutput = inferRouterOutputs<AppRouter>;
-
-  type GetGroupOutput = RouterOutput["group"]["getGroup"];
-  type GetCurrentUserOutput = RouterOutput["get"]["getCurrentUser"];
-
   // Make a database call to fetch groups data
   const username: GetCurrentUserOutput = await api.get.getCurrentUser(1); // todo update to user id
   const usernameString = username?.username ? username.username : "Anonymous";
@@ -34,6 +38,8 @@ export async function Resizable() {
           <ExerciseInfoBox
             ExsTitle={exercise.name}
             ExsDescription={exercise.description ?? "No description"}
+            ExsLectureId={exercise.lectureId}
+            ExsExerciseId={exercise.id}
           />
         </div>
       </ResizablePanel>
@@ -42,7 +48,7 @@ export async function Resizable() {
         <ResizablePanelGroup direction="vertical" className="h-full w-full">
           <ResizablePanel defaultSize={50}>
             <div className="m-1">
-              <CodeEditor roomId={groupRoomId as string} username={usernameString as string} />
+              <CodeEditor roomId={groupRoomId} username={usernameString} />
             </div>
           </ResizablePanel>
           <ResizableHandle />
