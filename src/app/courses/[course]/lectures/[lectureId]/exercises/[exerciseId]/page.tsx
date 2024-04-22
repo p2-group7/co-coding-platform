@@ -7,7 +7,7 @@ export default async function page({
   params: { exerciseId: string };
 }) {
   return (
-    <div className="m-1 h-screen w-screen">
+    <div className="m-1 w-screen flex-auto">
       <Resizable exerciseId={Number(params.exerciseId)} />
     </div>
   );

@@ -47,11 +47,11 @@ export default async function RootLayout({
       <body className={`font-sans ${inter.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <TRPCReactProvider>
-            <div>
+            <div className="flex h-screen flex-col">
               <div className="w-full">
                 <div className="ml-4">
-                <Navbar groups={groups} />{" "}
-                {/* Pass groups data to Navbar component */}
+                  <Navbar groups={groups} />{" "}
+                  {/* Pass groups data to Navbar component */}
                 </div>
               </div>
               {children}
