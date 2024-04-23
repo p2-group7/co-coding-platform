@@ -43,7 +43,6 @@
     "cmdk": "^1.0.0",
     "codemirror": "^6.0.1",
     "eslint-plugin-validate-filename": "^0.0.4",
-    "lucide-react": "^0.365.0",
     "jose": "^5.2.4",
     "lucide-react": "^0.368.0",
     "monaco-editor": "^0.47.0",
