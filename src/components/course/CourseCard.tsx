@@ -18,8 +18,8 @@ const InfoCard: React.FC<InfoCardProps> = ({ href, nameShort, name }) => {
     <ClickableCard href={href}>
       <Card className="h-[140px] cursor-pointer rounded-md p-4 shadow-md hover:bg-secondary">
         <CardHeader>
-          <CardTitle>{nameShort}</CardTitle>
-          <CardDescription className="truncate">{name}</CardDescription>
+          <CardTitle>{name}</CardTitle>
+          <CardDescription className="truncate">{nameShort}</CardDescription>
         </CardHeader>
       </Card>
     </ClickableCard>

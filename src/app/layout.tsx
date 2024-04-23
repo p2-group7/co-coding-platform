@@ -9,7 +9,6 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
-
 export default async function RootLayout({
   children,
 }: {
@@ -17,13 +16,11 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}` }>
+      <body className={`font-sans ${inter.variable}`}>
         <ThemeProvider attribute="class" defaultTheme="dark">
           <TRPCReactProvider>
             <div className="flex flex-col">
-              <div className="w-full">
-              {children}
-              </div>
+              <div className="w-full">{children}</div>
             </div>
           </TRPCReactProvider>
         </ThemeProvider>

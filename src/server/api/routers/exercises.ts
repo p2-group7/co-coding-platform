@@ -13,9 +13,12 @@ export const exercisesRouter = createTRPCRouter({
         },
       });
     }),
-  getAllExercises: publicProcedure.input(z.number())
-  .query(({ ctx, input }) => {
-    return ctx.db.exercise.findMany({where: {lectureId: input}})
+  getAllExercises: publicProcedure.input(z.number()).query(({ ctx, input }) => {
+    // Get all exercises for the given lecture, but only select the id, name, and description
+    return ctx.db.exercise.findMany({
+      where: { lectureId: input },
+      select: { id: true, name: true, description: true },
+    });
   }),
 
   getExercise: publicProcedure
