@@ -1,5 +1,5 @@
 import { api } from "@/trpc/server";
-import InfoCard from "@/components/course/CourseCard";
+import InfoCard from "@/components/course/InfoCard";
 import CourseCreatorCard from "@/components/course/CreateCourseCard";
 
 //This get all the course

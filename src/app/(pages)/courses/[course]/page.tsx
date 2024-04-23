@@ -1,4 +1,4 @@
-import InfoCard from "@/components/course/CourseCard";
+import InfoCard from "@/components/course/InfoCard";
 import { api } from "@/trpc/server";
 import React from "react";
 import CreateLectureCard from "@/components/course/CreateLectureCard";
@@ -25,7 +25,6 @@ export default async function page({ params }: { params: { course: string } }) {
     );
   });
 
-
   return (
     <div className="container mx-auto px-1">
       <h1 className="mt-6 pb-5 text-6xl">{course?.name}</h1>
@@ -38,8 +37,6 @@ export default async function page({ params }: { params: { course: string } }) {
         {lectureElements}
         <CreateLectureCard course={course.id} />
       </div>
-
-
     </div>
   );
 }

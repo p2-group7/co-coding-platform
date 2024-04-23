@@ -1,10 +1,16 @@
 import React from "react";
-import InfoCard from "@/components/course/CourseCard";
+import InfoCard from "@/components/course/InfoCard";
 import { api } from "@/trpc/server";
 import CreateExerciseCard from "@/components/course/CreateExerciseCard";
 
-export default async function page({params}: {params: { lectureId: string };}) {
-  const lecture = await api.lecture.getLecture({ id: Number(params.lectureId) });
+export default async function page({
+  params,
+}: {
+  params: { lectureId: string };
+}) {
+  const lecture = await api.lecture.getLecture({
+    id: Number(params.lectureId),
+  });
   if (lecture === null) {
     return "You dont have access to this";
   }
@@ -13,7 +19,10 @@ export default async function page({params}: {params: { lectureId: string };}) {
 
   const exerciseElements = exercises.map(function (exercise) {
     const hrefString = //look at this database bc exercise dont got course info
-      /*"/courses/" + course.id.toString()*/ + "/lectures/" + lecture.id.toString() +"/exercises/"+ exercise.id.toString();
+      /*"/courses/" + course.id.toString()*/ +"/lectures/" +
+      lecture.id.toString() +
+      "/exercises/" +
+      exercise.id.toString();
     return (
       <InfoCard
         key={exercise.id}
