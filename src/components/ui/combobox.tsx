@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -17,12 +17,12 @@ import {
 import { CommandList } from "cmdk";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/server/api/root";
-import { cn } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 
 type RouterOutput = inferRouterOutputs<AppRouter>;
 
 type exercises = RouterOutput["exercise"]["getAllExercises"];
-type exercise_id = exercises[0]["id"];
+type exercise_name = exercises[0]["name"];
 
 // Combobox that displays exercises
 export function Combobox({
@@ -30,10 +30,23 @@ export function Combobox({
   selected,
 }: {
   exercises: exercises;
-  selected?: exercise_id;
+  selected?: exercise_name;
 }) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState(selected);
+
+  const router = useRouter();
+  const currentPath = usePathname();
+
+  const replaceLastPathSegment = ({ newSegment }: { newSegment: string }) => {
+    const parts = currentPath.split("/");
+    parts[parts.length - 1] =
+      exercises
+        .find((exercise) => exercise.name === newSegment)
+        ?.id.toString() ?? ""; // Set the last segment to the exercise ID if found
+    const newPath = parts.join("/");
+    router.push(newPath);
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -46,8 +59,8 @@ export function Combobox({
           className="w-[250px] justify-between"
         >
           {/* Display selected exercise or default message */}
-          {selected
-            ? exercises.find((exercise) => exercise.id === selected)?.name
+          {value
+            ? exercises.find((exercise) => exercise.name === value)?.name
             : "Select Exercise"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -70,6 +83,9 @@ export function Combobox({
                     // Update selected exercise when clicked
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false); // Close the popover
+                    replaceLastPathSegment({
+                      newSegment: currentValue,
+                    });
                   }}
                 >
                   {/* Display exercise label */}
@@ -79,7 +95,7 @@ export function Combobox({
                       value === selected ? "opacity-100" : "opacity-0",
                     )}
                   /> */}
-                  {exercise.description}
+                  {exercise.name}
                 </CommandItem>
               ))}
             </CommandList>

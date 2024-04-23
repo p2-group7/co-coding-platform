@@ -6,7 +6,6 @@ import type { GroupInfo } from "@/components/Navbar";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/server/api/root";
 
-
 type RouterOutput = inferRouterOutputs<AppRouter>;
 
 type GetGroupsOutput = RouterOutput["group"]["getGroups"];
@@ -27,7 +26,7 @@ export default async function Layout({
   }));
 
   return (
-    <div>
+    <div className="flex h-screen flex-col">
       <div className="w-full">
         <Navbar groups={groups} /> {/* Pass groups data to Navbar component */}
       </div>

@@ -13,16 +13,12 @@ const ExerciseInfoBox: React.FC<ExerciseProps> = ({
   ExsTitle,
   ExsDescription,
   ExsLectureId,
-  ExsExerciseId,
 }) => {
   return (
     <div className="h-full w-full">
       <div className="flex h-full flex-col rounded-lg border border-transparent bg-secondary p-4">
         <div className="mb-4 flex items-start">
-          <ExCombo
-            lectureId={ExsLectureId}
-            selectedExerciseId={ExsExerciseId}
-          />
+          <ExCombo lectureId={ExsLectureId} selectedExerciseName={ExsTitle} />
           <Button className="mx-5 bg-black">
             <Pencil1Icon />
           </Button>

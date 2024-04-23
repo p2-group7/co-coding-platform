@@ -10,34 +10,27 @@ type exercisesType = RouterOutput["exercise"]["getAllExercises"];
 
 export type ExComboProps = {
   lectureId: number;
-  selectedExerciseId: number;
+  selectedExerciseName: string;
 };
 
-const ExCombo: React.FC<ExComboProps> = ({ lectureId, selectedExerciseId }) => {
-  let exercises = [] as exercisesType;
+async function ExCombo({ lectureId, selectedExerciseName }: ExComboProps) {
+  let exercises: exercisesType = [];
   // Fetch exercises belonging to the lecture
-  async function fetchExercises() {
-    try {
-      // Call the API to fetch exercises by lectureId
-      const fetchedExercises = await api.exercise.getAllExercises(lectureId);
-      // Update the state with fetched exercises
-      exercises = fetchedExercises;
-    } catch (error) {
-      console.error("Error fetching exercises:", error);
-    }
+  try {
+    // Call the API to fetch exercises by lectureId
+    const fetchedExercises = await api.exercise.getAllExercises(lectureId);
+    // Update the state with fetched exercises
+    exercises = fetchedExercises;
+    console.log(exercises);
+  } catch (error) {
+    console.error("Error fetching exercises:", error);
   }
 
-  // Fetch exercises only if lectureId is provided
-  if (lectureId) {
-    fetchExercises().catch((error) => {
-      console.error("Error fetching exercises:", error); // TODO handle error
-    });
-  }
   return (
     <div>
-      <Combobox exercises={exercises} selected={selectedExerciseId} />
+      <Combobox exercises={exercises} selected={selectedExerciseName} />
     </div>
   );
-};
+}
 
 export default ExCombo;
