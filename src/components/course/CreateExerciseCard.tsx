@@ -26,23 +26,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 
-// Changed here
+// Define Zod schema for form validation
 const FormSchema = z.object({
   exerciseName: z.string().min(2, {
     message: "Exercise name must be at least 2 characters.",
   }),
+  exerciseDescription: z.string().min(1, {
+    message: "Please provide a description.",
+  }),
 });
 
+//Initialize so current lecture id can be passed to the create exercise function
 type CreateExerciseCardProps = {
   lecture: number;
 };
 
-// Changed here
+// Body of CreateExerciseCard component
 const CreateExerciseCard: React.FC<CreateExerciseCardProps> = ({ lecture }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       exerciseName: "",
+      exerciseDescription: "",
     },
   });
   const router = useRouter();
@@ -56,12 +61,13 @@ const CreateExerciseCard: React.FC<CreateExerciseCardProps> = ({ lecture }) => {
   function onSubmit(values: z.infer<typeof FormSchema>) {
     const data = {
       exerciseName: values.exerciseName,
+      exerciseDescription: values.exerciseDescription,
       lectureId: lecture,
     };
-
+    console.log("Data to be sent:", data);
     createExercise.mutate(data);
   }
-
+  // Sheet and form from shadcn
   return (
     <Sheet>
       <SheetTrigger>
@@ -81,12 +87,11 @@ const CreateExerciseCard: React.FC<CreateExerciseCardProps> = ({ lecture }) => {
                 className="w-full space-y-6"
               >
                 <FormField
-                  control={form.control}
-                  name="exerciseName" // Change from "name" to "lectureName"
+                  control={form.control} // Passes the form control to the form field with {...field}
+                  name="exerciseName" 
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Exercise name</FormLabel>{" "}
-                      {/* Changed label text */}
                       <FormControl>
                         <Input placeholder="" {...field} />
                       </FormControl>
@@ -95,9 +100,22 @@ const CreateExerciseCard: React.FC<CreateExerciseCardProps> = ({ lecture }) => {
                     </FormItem>
                   )}
                 />
-
+                <FormField
+                  control={form.control} // Passes the form control to the form field with {...field}
+                  name="exerciseDescription" 
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Exercise description</FormLabel>{" "}
+                      <FormControl>
+                        <Input placeholder="" {...field} />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <SheetClose>
-                  <Button type="submit">Submit</Button>
+                  <Button type="submit">Submit</Button>  {/* initialize submit function */}
                 </SheetClose>
               </form>
             </Form>

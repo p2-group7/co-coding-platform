@@ -26,42 +26,50 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 
-// Changed here
+// Define Zod schema for form validation
 const FormSchema = z.object({
   lectureName: z.string().min(2, {
     message: "Lecture name must be at least 2 characters.",
   }),
+  lectureDescription: z.string().min(1, {
+    message: "Please provide a description.",
+  }),
 });
-
+//Initialize so current course id can be passed to the create lecture function
 type CreateLectureCardProps = {
   course: number;
 };
 
-// Changed here
+// Body of CreateLectureCard component
 const CreateLectureCard: React.FC<CreateLectureCardProps> = ({ course }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       lectureName: "",
+      lectureDescription: "",
     },
   });
   const router = useRouter();
 
+  // Function to create new lecture in database using mutation and refresh page
   const createLecture = api.lecture.create.useMutation({
     onSuccess: () => {
       router.refresh();
     },
   });
 
+  // Function to handle form submission utilizing the createLecture mutation
+  // Also passes the defines Zod schema to the form
   function onSubmit(values: z.infer<typeof FormSchema>) {
     const data = {
       lectureName: values.lectureName,
+      lectureDescription: values.lectureDescription,
       courseId: course,
     };
 
     createLecture.mutate(data);
   }
-
+  // Sheet and form from shadcn
   return (
     <Sheet>
       <SheetTrigger>
@@ -81,8 +89,8 @@ const CreateLectureCard: React.FC<CreateLectureCardProps> = ({ course }) => {
                 className="w-full space-y-6"
               >
                 <FormField
-                  control={form.control}
-                  name="lectureName" // Change from "name" to "lectureName"
+                  control={form.control} // Passes the form control to the form field with {...field}
+                  name="lectureName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Lecture name</FormLabel>{" "}
@@ -96,8 +104,24 @@ const CreateLectureCard: React.FC<CreateLectureCardProps> = ({ course }) => {
                   )}
                 />
 
+                <FormField
+                  control={form.control} // Passes the form control to the form field with {...field}
+                  name="lectureDescription"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Lecture description</FormLabel>{" "}
+                      {/* Changed label text */}
+                      <FormControl>
+                        <Input placeholder="" {...field} />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <SheetClose>
-                  <Button type="submit">Submit</Button>
+                  <Button type="submit">Submit</Button> {/* initialize submit function */}
                 </SheetClose>
               </form>
             </Form>

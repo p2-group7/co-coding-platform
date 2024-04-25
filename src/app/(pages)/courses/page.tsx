@@ -9,12 +9,13 @@ export default async function Courses() {
     const hrefStr = "/courses/" + course.id.toString();
 
     // this creates an array the courses as info cards
+    
     return (
       <InfoCard
         key={course.id}
         href={hrefStr}
-        nameShort={course.abrev}
-        name={course.name}
+        cardTitle={course.abrev}
+        cardDescription={course.name}
       />
     );
   });
