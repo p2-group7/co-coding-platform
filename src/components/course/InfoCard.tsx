@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Card,
   CardDescription,
@@ -12,13 +11,23 @@ import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import { GearIcon } from "@radix-ui/react-icons";
 
+// Define props for the InfoCard component
 type InfoCardProps = {
   href: string;
-  nameShort: string;
-  name: string;
+  cardDescription: string;
+  cardTitle: string;
 };
 
-const InfoCard: React.FC<InfoCardProps> = ({ href, nameShort, name }) => {
+// CSS is not dynamic and breaks when description is too long, thefore we trunicate it to not break the design
+const truncateDescription = (description: string) => {
+  if (description.length > 11) {
+    return description.slice(0, 11) + "...";
+  }
+  return description;
+};
+
+// Body of InfoCard component
+const InfoCard: React.FC<InfoCardProps> = ({ href, cardDescription, cardTitle }) => {
   const router = useRouter();
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -32,12 +41,12 @@ const InfoCard: React.FC<InfoCardProps> = ({ href, nameShort, name }) => {
         <CardHeader>
           <div className="flex flex-row">
             <div className="flex flex-1 flex-col">
-              <CardTitle>{name}</CardTitle>
+              <CardTitle>{cardTitle}</CardTitle> {/* Title of the card */}
               <CardDescription className="truncate">
-                {nameShort}
+                {truncateDescription(cardDescription)} {/* (Trunicated) Description of the card */}
               </CardDescription>
             </div>
-            <Button onClick={handleButtonClick}>
+            <Button onClick={handleButtonClick}> {/* Button to edit the card */}
               <GearIcon />
             </Button>
           </div>
@@ -48,3 +57,4 @@ const InfoCard: React.FC<InfoCardProps> = ({ href, nameShort, name }) => {
 };
 
 export default InfoCard;
+

@@ -27,8 +27,8 @@ export default async function page({
       <InfoCard
         key={exercise.id}
         href={hrefString}
-        nameShort={exercise.name}
-        name={exercise.description ?? "N/A"}
+        cardTitle={exercise.name}
+        cardDescription= {exercise.description ?? "N/A"}
       />
     );
   });

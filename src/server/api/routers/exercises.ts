@@ -4,11 +4,12 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 // TODO: Public must be a protected
 export const exercisesRouter = createTRPCRouter({
   create: publicProcedure
-    .input(z.object({ exerciseName: z.string().min(2), lectureId: z.number() }))
+    .input(z.object({ exerciseName: z.string().min(2), lectureId: z.number(), exerciseDescription: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
       return ctx.db.exercise.create({
         data: {
           name: input.exerciseName,
+          description: input.exerciseDescription,
           lectureId: input.lectureId,
         },
       });
