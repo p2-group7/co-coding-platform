@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-base-to-string */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -10,21 +11,31 @@ import { yCollab } from "y-codemirror.next";
 import { WebsocketProvider } from "y-websocket";
 import { EditorView, basicSetup } from "codemirror";
 import { EditorState } from "@codemirror/state";
-import { javascript } from "@codemirror/lang-javascript";
+import { keymap } from "@codemirror/view";
+import { indentWithTab } from "@codemirror/commands";
+import { clike } from "@codemirror/legacy-modes/mode/clike";
 import RandomColor from "randomcolor";
 import { oneDark } from "@codemirror/theme-one-dark";
+import { StreamLanguage } from "@codemirror/language";
 
 interface CodeEditorProps {
   roomId: string;
   username: string;
+  onCodeChange: (code: string) => void;
 }
 
-export default function CodeEditor({ roomId, username }: CodeEditorProps) {
+export default function CodeEditor({
+  roomId,
+  username,
+  onCodeChange,
+}: CodeEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
+  const [ydoc, setYDoc] = useState<Y.Doc>();
 
   useEffect(() => {
     const doc = new Y.Doc(); // a collection of shared objects -> Text
+    setYDoc(doc);
 
     let webrtcprovider: WebsocketProvider | null = null;
     // Connect to peers (or start connection) with websocket
@@ -55,7 +66,8 @@ export default function CodeEditor({ roomId, username }: CodeEditorProps) {
       doc: yText.toString(),
       extensions: [
         basicSetup,
-        javascript(),
+        keymap.of([indentWithTab]),
+        StreamLanguage.define(clike({ name: "C" })),
         oneDark,
         yCollab(yText, webrtcprovider.awareness, {
           yUndoManager,
@@ -77,10 +89,26 @@ export default function CodeEditor({ roomId, username }: CodeEditorProps) {
     };
   }, [roomId, username]);
 
+  useEffect(() => {
+    if (ydoc) {
+      ydoc.on("update", (update: any) => {
+        // log current ytext
+        const yText = ydoc.getText("codemirror");
+        const text = yText.toString();
+        onCodeChange(text); // update codespace state for text in code editor
+      });
+    }
+  }, [ydoc]);
+
   return (
     <div>
-      <div className="flex justify-center" hidden={!loading}>
-        <p hidden={!loading}>Loading...</p>
+      <div
+        className="flex items-center justify-center text-center"
+        hidden={!loading}
+      >
+        <p className="animate-pulse" hidden={!loading}>
+          Loading code editor...
+        </p>
       </div>
       <div ref={editorRef} id="editor" hidden={loading}></div>
     </div>

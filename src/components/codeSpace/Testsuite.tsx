@@ -15,7 +15,7 @@ const tags = [
   "8: n > 10000",
 ];
 
-export function testsuite() {
+export function Testsuite() {
   return (
     <div className=" h-full w-full overflow-auto rounded-md border bg-secondary ">
       <div className="p-4 pb-2 ">
@@ -23,7 +23,9 @@ export function testsuite() {
           <React.Fragment key={tag}>
             <div className="flex items-center justify-between">
               <div>{tag}</div>
-              <Button className="bg-black font-bold"><PlayIcon /></Button>
+              <Button className="bg-black font-bold">
+                <PlayIcon />
+              </Button>
             </div>
             <Separator className="my-2" />
           </React.Fragment>
@@ -33,4 +35,4 @@ export function testsuite() {
   );
 }
 
-export default testsuite;
+export default Testsuite;

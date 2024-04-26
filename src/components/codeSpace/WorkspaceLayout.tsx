@@ -4,20 +4,18 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import ExerciseInfoBox from "./ExerciseInfoBox";
-import CodeEditor from "../ui/CodeEditor";
-import TestSuiteScrollArea from "./Testsuite";
 
 import { api } from "@/trpc/server";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/server/api/root";
+import Codespace from "./Codespace";
 
 type RouterOutput = inferRouterOutputs<AppRouter>;
 
 type GetGroupOutput = RouterOutput["group"]["getGroup"];
 type GetCurrentUserOutput = RouterOutput["get"]["getCurrentUser"];
 
-// Gets exercise 1 as the default exercise.
-export async function Resizable({ exerciseId }: { exerciseId: number }) {
+export async function WorkspaceLayout({ exerciseId }: { exerciseId: number }) {
   const exercise = await api.exercise.getExercise({
     id: exerciseId,
   });
@@ -30,7 +28,8 @@ export async function Resizable({ exerciseId }: { exerciseId: number }) {
   const usernameString = username?.username ? username.username : "Anonymous";
 
   const group: GetGroupOutput = await api.group.getGroup(1);
-  const groupRoomId = group?.roomId ? group.roomId : "test";
+  // room id is group id + exercise id, therefore ensuring all exercises for the group are unique
+  const exerciseWorkspaceId = group?.roomId + "-" + exerciseId.toString();
   return (
     <ResizablePanelGroup direction="horizontal" className="h-screen w-screen">
       <ResizablePanel defaultSize={50}>
@@ -45,35 +44,13 @@ export async function Resizable({ exerciseId }: { exerciseId: number }) {
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize={50}>
-        <ResizablePanelGroup direction="vertical" className="h-full w-full">
-          <ResizablePanel defaultSize={50}>
-            <div className="m-1">
-              <CodeEditor roomId={groupRoomId} username={usernameString} />
-            </div>
-          </ResizablePanel>
-          <ResizableHandle />
-          <ResizablePanel defaultSize={50}>
-            <ResizablePanelGroup
-              direction="horizontal"
-              className="h-full w-full"
-            >
-              <ResizablePanel defaultSize={50}>
-                <div className="m-1 flex h-full items-stretch justify-center">
-                  <TestSuiteScrollArea />
-                </div>
-              </ResizablePanel>
-              <ResizableHandle />
-              <ResizablePanel defaultSize={50}>
-                <div className="flex h-full items-center justify-center p-6">
-                  <span className="font-semibold">Four</span>
-                </div>
-              </ResizablePanel>
-            </ResizablePanelGroup>
-          </ResizablePanel>
-        </ResizablePanelGroup>
+        <Codespace
+          usernameString={usernameString}
+          groupRoomId={exerciseWorkspaceId}
+        />
       </ResizablePanel>
     </ResizablePanelGroup>
   );
 }
 
-export default Resizable;
+export default WorkspaceLayout;

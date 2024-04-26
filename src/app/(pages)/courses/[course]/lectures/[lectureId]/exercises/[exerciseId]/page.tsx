@@ -1,5 +1,5 @@
 import React from "react";
-import Resizable from "@/components/codeSpace/Resizable";
+import WorkspaceLayout from "@/components/codeSpace/WorkspaceLayout";
 
 export default async function page({
   params,
@@ -8,7 +8,7 @@ export default async function page({
 }) {
   return (
     <div className="m-1 w-screen flex-auto">
-      <Resizable exerciseId={Number(params.exerciseId)} />
+      <WorkspaceLayout exerciseId={Number(params.exerciseId)} />
     </div>
   );
 }

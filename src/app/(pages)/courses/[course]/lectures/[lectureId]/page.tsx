@@ -28,7 +28,7 @@ export default async function page({
         key={exercise.id}
         href={hrefString}
         cardTitle={exercise.name}
-        cardDescription= {exercise.description ?? "N/A"}
+        cardDescription={exercise.description ?? "N/A"}
       />
     );
   });
