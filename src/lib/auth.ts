@@ -30,6 +30,10 @@ export async function decrypt(input: string) {
   return payload;
 }
 
+export async function signOut() {
+  cookies().delete("session");
+}
+
 export async function login(user: User) {
   if (!user.username || !user.password) {
     return "Username or password is not valid";

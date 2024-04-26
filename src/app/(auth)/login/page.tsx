@@ -134,7 +134,7 @@ export default function LoginForm() {
                     <FormItem>
                       <FormLabel>Password</FormLabel> {/* Changed label text */}
                       <FormControl>
-                        <Input placeholder="" {...field} />
+                        <Input type="password" placeholder="" {...field} />
                       </FormControl>
                       <FormDescription></FormDescription>
                       <FormMessage />

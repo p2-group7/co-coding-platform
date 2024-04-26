@@ -26,6 +26,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
 
+// PLEASE CHECK "CREATELECTURECARD" FILE FOR CLARIFICATIONS, THERE ARE MORE COMMENTS. 
+
+// Define Zod schema for form validation
 const FormSchema = z.object({
   name: z.string().min(2, {
     message: "Course name must be at least 2 characters.",
@@ -33,6 +36,7 @@ const FormSchema = z.object({
   abrev: z.string().min(1).max(10),
 });
 
+// Body of CourseCreatorCard component
 const CourseCreatorCard = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -52,6 +56,7 @@ const CourseCreatorCard = () => {
   function onSubmit(values: z.infer<typeof FormSchema>) {
     createCourse.mutate(values);
   }
+  // Sheet and form from shadcn
   return (
     <Sheet>
       <SheetTrigger>
@@ -99,7 +104,7 @@ const CourseCreatorCard = () => {
                   )}
                 />
                 <SheetClose>
-                  <Button type="submit">Submit</Button>
+                  <Button type="submit">Submit</Button>  {/* initialize submit function */}
                 </SheetClose>
               </form>
             </Form>

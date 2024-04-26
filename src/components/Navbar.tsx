@@ -68,7 +68,7 @@ export function NavigationMenuDemo({ groups }: { groups: GroupInfo[] }) {
                         Your Courses
                       </div>
                       <p className="text-sm leading-tight text-muted-foreground">
-                        Have fun 😎
+                        This is fun 🥲
                       </p>
                     </a>
                   </NavigationMenuLink>
