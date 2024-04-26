@@ -24,6 +24,7 @@ export async function Resizable({ exerciseId }: { exerciseId: number }) {
   if (exercise === null) {
     return <div>You dont have access to this exercise</div>;
   }
+
   // codeeditor
   // Make a database call to fetch groups data
   const username: GetCurrentUserOutput = await api.get.getCurrentUser(1); // todo update to user id

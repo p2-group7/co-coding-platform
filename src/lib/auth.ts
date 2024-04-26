@@ -39,12 +39,17 @@ export async function login(user: User) {
     return "Username or password is not valid";
   }
 
-  const isAuthorized = await checkUserCredentials(user.username, user.password);
+  let isAuthorized = false;
+  const userInfo = await checkUserCredentials(user.username, user.password);
+  if (userInfo != null) {
+    isAuthorized = true;
+  }
 
   if (isAuthorized) {
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + expiryTime);
-    const session = await encrypt({ user, expires }, expires);
+    const id = userInfo?.id;
+    const session = await encrypt({ user, id, expires }, expires);
     cookies().set("session", session, { httpOnly: true });
     return true;
   } else {
@@ -68,9 +73,9 @@ async function checkUserCredentials(username: string, password: string) {
     });
 
     if (user && user.password === password) {
-      return true;
+      return user;
     } else {
-      return false;
+      return null;
     }
   } catch (error) {
     console.log("Could not retrieve user", error);

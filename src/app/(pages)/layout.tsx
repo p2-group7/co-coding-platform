@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import type { GroupInfo } from "@/components/Navbar";
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/server/api/root";
+import AuthContextProvider from "@/components/contexts/AuthContextProvider";
 
 type RouterOutput = inferRouterOutputs<AppRouter>;
 
@@ -26,11 +27,14 @@ export default async function Layout({
   }));
 
   return (
-    <div className="flex h-screen flex-col">
-      <div className="w-full">
-        <Navbar groups={groups} /> {/* Pass groups data to Navbar component */}
+    <AuthContextProvider>
+      <div className="flex h-screen flex-col">
+        <div className="w-full">
+          <Navbar groups={groups} />{" "}
+          {/* Pass groups data to Navbar component */}
+        </div>
+        {children}
       </div>
-      {children}
-    </div>
+    </AuthContextProvider>
   );
 }
