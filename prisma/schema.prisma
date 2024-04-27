@@ -72,4 +72,6 @@ model Test {
   name       String
   exerciseId Int
   exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  input      String
+  output     String
 }

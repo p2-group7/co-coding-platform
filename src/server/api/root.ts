@@ -5,6 +5,7 @@ import { getRouter } from "./routers/get";
 import { coursesRouter } from "./routers/courses";
 import { lecturesRouter } from "./routers/lectures";
 import { exercisesRouter } from "./routers/exercises";
+import { testRouter } from "./routers/test";
 //import  groupRouter  from "./routers/group";
 
 /**
@@ -18,9 +19,9 @@ export const appRouter = createTRPCRouter({
   get: getRouter,
   course: coursesRouter,
   lecture: lecturesRouter,
-  exercise: exercisesRouter
+  exercise: exercisesRouter,
+  test: testRouter,
 });
-
 // export type definition of API
 export type AppRouter = typeof appRouter;
 
