@@ -19,6 +19,7 @@ export async function WorkspaceLayout({ exerciseId }: { exerciseId: number }) {
   const exercise = await api.exercise.getExercise({
     id: exerciseId,
   });
+  const tests = await api.test.getAllTestForExercise(exerciseId);
   if (exercise === null) {
     return <div>You dont have access to this exercise</div>;
   }
@@ -45,6 +46,7 @@ export async function WorkspaceLayout({ exerciseId }: { exerciseId: number }) {
       <ResizableHandle />
       <ResizablePanel defaultSize={50}>
         <Codespace
+          tests={tests}
           usernameString={usernameString}
           groupRoomId={exerciseWorkspaceId}
         />

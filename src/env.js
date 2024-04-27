@@ -24,6 +24,7 @@ export const env = createEnv({
    * isn't built with invalid env vars. To expose them to the client, prefix them with
    * `NEXT_PUBLIC_`.
    */
+  // TODO: CHANGE TO SERVER SIDE ENV in PROD
   client: {
     NEXT_PUBLIC_RAPID_API_KEY: z.string(),
   },
