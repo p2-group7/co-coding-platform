@@ -91,7 +91,7 @@ export default function CodeEditor({
 
   useEffect(() => {
     if (ydoc) {
-      ydoc.on("update", (update: any) => {
+      ydoc.on("update", () => {
         // log current ytext
         const yText = ydoc.getText("codemirror");
         const text = yText.toString();

@@ -9,7 +9,10 @@ type TestButtonProps = {
   id: string;
   testInput: string;
   testOutput: string;
-  testSubmit: (testInput: string, testOutput: string) => Promise<boolean>;
+  testSubmit: (
+    testInput: string,
+    testOutput: string,
+  ) => Promise<boolean | undefined>;
 };
 
 const testButtonErrorStyle = cn("bg-red-500 font-bold", "hover:bg-red-500/70");

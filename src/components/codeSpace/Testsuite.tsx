@@ -16,7 +16,10 @@ export function Testsuite({
   tests,
   setOutput,
 }: {
-  testSubmit: (testInput: string, testOutput: string) => Promise<boolean>;
+  testSubmit: (
+    testInput: string,
+    testOutput: string,
+  ) => Promise<boolean | undefined>;
   tests: getAllTestsOutput;
   setOutput: (output: string) => void;
 }) {
