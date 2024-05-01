@@ -6,11 +6,15 @@ import {
 } from "@/components/ui/resizable";
 import CodeEditor from "../ui/CodeEditor";
 import TestSuite from "./Testsuite";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { env } from "@/env";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.bubble.css";
 
 import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/server/api/root";
+import { Button } from "../ui/button";
+import { PlayIcon } from "lucide-react";
 
 type RouterOutput = inferRouterOutputs<AppRouter>;
 
@@ -41,40 +45,35 @@ function Codespace(props: CodespaceProps) {
   const [output, setOutput] = useState("");
 
   const handleSubmit = () => {
-    // if text contains //run
-    if (code.includes("//run")) {
-      console.log("run");
-
-      // send code to judge0 api
-      const data = {
-        language_id: 50, // id for C with gcc 9.2.0
-        source_code: btoa(code), // base64 encoded code
-      };
-      const url =
-        "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&fields=*";
-      fetch(url, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "Content-Type": "application/json",
-          "X-RapidAPI-Key": env.NEXT_PUBLIC_RAPID_API_KEY,
-          "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((data: postSubmissionResponse) => {
-          console.log(data);
-          const token = data.token;
-          console.log(token);
-          checkStatus(token).catch((err) => {
-            console.log("err in checkstatus", err);
-          });
-        })
-        .catch((err) => {
-          console.log(err);
+    // send code to judge0 api
+    const data = {
+      language_id: 50, // id for C with gcc 9.2.0
+      source_code: btoa(code), // base64 encoded code
+    };
+    const url =
+      "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&fields=*";
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "Content-Type": "application/json",
+        "X-RapidAPI-Key": env.NEXT_PUBLIC_RAPID_API_KEY,
+        "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data: postSubmissionResponse) => {
+        console.log(data);
+        const token = data.token;
+        console.log(token);
+        checkStatus(token).catch((err) => {
+          console.log("err in checkstatus", err);
         });
-    }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const checkStatus = async (token: string) => {
@@ -156,16 +155,18 @@ function Codespace(props: CodespaceProps) {
     }
   };
 
-  // When the code changes, run the handleSubmit function
-  useEffect(() => {
-    //console.log("code", code);
-    handleSubmit();
-  }, [code]);
   return (
     <ResizablePanelGroup direction="vertical" className="h-full w-full">
       <ResizablePanel defaultSize={50}>
-        <div className="m-1">
+        <div className="relative m-1">
+          <Button
+            onClick={() => handleSubmit()}
+            className="absolute right-3 top-3 z-10 bg-gray-500 hover:bg-gray-500/70"
+          >
+            <PlayIcon />
+          </Button>
           <CodeEditor
+            className="-z-0"
             roomId={props.groupRoomId}
             username={props.usernameString}
             onCodeChange={(code) => setCode(code)} // function to update code in state
@@ -186,8 +187,12 @@ function Codespace(props: CodespaceProps) {
           </ResizablePanel>
           <ResizableHandle />
           <ResizablePanel defaultSize={50}>
-            <div className="flex h-full items-center justify-center p-6">
-              <p className="text-wrap font-semibold">{output}</p>
+            <div className="flex h-full p-6">
+              <ReactQuill
+                value={output}
+                theme="bubble"
+                readOnly={true}
+              ></ReactQuill>
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>

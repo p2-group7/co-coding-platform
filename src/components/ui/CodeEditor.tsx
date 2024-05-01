@@ -22,12 +22,14 @@ interface CodeEditorProps {
   roomId: string;
   username: string;
   onCodeChange: (code: string) => void;
+  className?: string;
 }
 
 export default function CodeEditor({
   roomId,
   username,
   onCodeChange,
+  className,
 }: CodeEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
@@ -101,7 +103,7 @@ export default function CodeEditor({
   }, [ydoc]);
 
   return (
-    <div>
+    <div className={className}>
       <div
         className="flex items-center justify-center text-center"
         hidden={!loading}

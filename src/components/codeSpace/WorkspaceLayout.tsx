@@ -33,7 +33,7 @@ export async function WorkspaceLayout({ exerciseId }: { exerciseId: number }) {
   const exerciseWorkspaceId = group?.roomId + "-" + exerciseId.toString();
   return (
     <ResizablePanelGroup direction="horizontal" className="h-screen w-screen">
-      <ResizablePanel defaultSize={50}>
+      <ResizablePanel defaultSize={30}>
         <div className="m-1 flex h-full items-center justify-center">
           <ExerciseInfoBox
             ExsTitle={exercise.name}
