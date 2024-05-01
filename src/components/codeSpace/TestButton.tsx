@@ -12,11 +12,7 @@ type TestButtonProps = {
   testSubmit: (testInput: string, testOutput: string) => Promise<boolean>;
 };
 
-const testButtonErrorStyle = cn(
-  "bg-primary font-bold",
-  "hover:bg-primary/90",
-  "text-red-500",
-);
+const testButtonErrorStyle = cn("bg-red-500 font-bold", "hover:bg-red-500/70");
 
 const testButtonSuccessStyle = cn(
   "bg-green-500 font-bold",
@@ -24,8 +20,8 @@ const testButtonSuccessStyle = cn(
 );
 
 const testButtonLoadingStyle = cn(
-  "bg-green-500 font-bold",
-  "hover:bg-green-500/70",
+  "bg-gray-500 font-bold",
+  "hover:bg-gray-500/70",
   "animate-pulse",
 );
 

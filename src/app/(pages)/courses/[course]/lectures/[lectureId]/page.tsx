@@ -17,9 +17,13 @@ export default async function page({
 
   const exercises = await api.exercise.getAllExercises(lecture.id);
 
+  console.log("lectureid", lecture.id.toString());
+
   const exerciseElements = exercises.map(function (exercise) {
-    const hrefString = //look at this database bc exercise dont got course info
-      /*"/courses/" + course.id.toString()*/ +"/lectures/" +
+    const hrefString =
+      "/courses/" +
+      lecture.courseId +
+      "/lectures/" +
       lecture.id.toString() +
       "/exercises/" +
       exercise.id.toString();

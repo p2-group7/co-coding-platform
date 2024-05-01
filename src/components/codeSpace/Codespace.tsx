@@ -97,24 +97,7 @@ function Codespace(props: CodespaceProps) {
 
       // Check if processing is complete
       if (statusId === 1 || statusId === 2) {
-        new Promise<[number, string] | string>((resolve, reject) => {
-          setTimeout(() => {
-            checkStatus(token)
-              .then(([status, result]) => {
-                resolve([status, result] as [number, string]);
-              })
-              .catch((err) => {
-                reject(err);
-              });
-          }, 2000);
-        })
-          .then(([status, result]) => {
-            return [status, result] as [number, string];
-          })
-          .catch((err) => {
-            console.log("err in checkstatus", err);
-            return [0, "error"];
-          });
+        return [statusId, responseData.status.description];
       }
 
       if (statusId === 3) {
@@ -156,11 +139,15 @@ function Codespace(props: CodespaceProps) {
     const responseData = (await res.json()) as postSubmissionResponse;
     const token = responseData.token;
     while (true) {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       const [status, result] = await checkStatus(token);
       if (status === 3) {
         console.log("test completed");
         console.log(result);
         return testOutput === result;
+      }
+      if (status === 1 || status === 2) {
+        break;
       } else {
         console.log("test failed");
         console.log(result);
