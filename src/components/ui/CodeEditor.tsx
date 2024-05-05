@@ -53,16 +53,16 @@ export default function CodeEditor({
       setLoading(false);
     });
 
-    // Define a shared text type "codemirror"
-    const yText = doc.getText("codemirror");
-    // Bind the shared ytext to the undo manager
-    const yUndoManager = new Y.UndoManager(yText);
-
     // Share name and color of the user through the websocket
     webrtcprovider.awareness.setLocalStateField("user", {
       name: username,
       color: RandomColor(),
     });
+
+    // Define a shared text type "codemirror"
+    const yText = doc.getText("codemirror");
+    // Bind the shared ytext to the undo manager
+    const yUndoManager = new Y.UndoManager(yText);
 
     // Define the state of the editor
     const state = EditorState.create({
