@@ -13,7 +13,7 @@ import { EditorView, basicSetup } from "codemirror";
 import { EditorState } from "@codemirror/state";
 import { keymap } from "@codemirror/view";
 import { indentWithTab } from "@codemirror/commands";
-import { clike } from "@codemirror/legacy-modes/mode/clike";
+import { c } from "@codemirror/legacy-modes/mode/clike";
 import RandomColor from "randomcolor";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { StreamLanguage } from "@codemirror/language";
@@ -57,7 +57,6 @@ export default function CodeEditor({
 
     const yUndoManager = new Y.UndoManager(yText);
 
-    // TODO fix to be current user and a random color
     webrtcprovider.awareness.setLocalStateField("user", {
       name: username,
       color: RandomColor(),
@@ -69,7 +68,7 @@ export default function CodeEditor({
       extensions: [
         basicSetup,
         keymap.of([indentWithTab]),
-        StreamLanguage.define(clike({ name: "C" })),
+        StreamLanguage.define(c),
         oneDark,
         yCollab(yText, webrtcprovider.awareness, {
           yUndoManager,
