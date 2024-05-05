@@ -37,7 +37,7 @@ export default function CodeEditor({
 
   useEffect(() => {
     const doc = new Y.Doc(); // a collection of shared objects -> Text
-    setYDoc(doc);
+    setYDoc(doc); // set the ydoc state to the doc, so it can be used later
 
     let webrtcprovider: WebsocketProvider | null = null;
     // Connect to peers (or start connection) with websocket
@@ -53,34 +53,41 @@ export default function CodeEditor({
       setLoading(false);
     });
 
+    // Define a shared text type "codemirror"
     const yText = doc.getText("codemirror");
-
+    // Bind the shared ytext to the undo manager
     const yUndoManager = new Y.UndoManager(yText);
 
+    // Share name and color of the user through the websocket
     webrtcprovider.awareness.setLocalStateField("user", {
       name: username,
       color: RandomColor(),
     });
 
+    // Define the state of the editor
     const state = EditorState.create({
       // eslint-disable-next-line @typescript-eslint/no-base-to-string
-      doc: yText.toString(),
+      doc: yText.toString(), // bind the shared ytext to the editor -> this is where the magic happens
       extensions: [
         basicSetup,
         keymap.of([indentWithTab]),
-        StreamLanguage.define(c),
-        oneDark,
+        StreamLanguage.define(c), // define the language of the editor
+        oneDark, // define the theme of the editor
         yCollab(yText, webrtcprovider.awareness, {
           yUndoManager,
-        }),
+        }), // bind the undo manager to the editor
       ],
     });
 
+    // Get the editor ref
     const editorRefEelement: Element = editorRef.current as Element;
+    // Finally render the editor with the state and the editor ref
     const view = new EditorView({
       state,
       parent: editorRefEelement,
     });
+
+    // Cleanup function to destroy the editor and websocket connection, when the component is unmounted or roomid/username changes
     return () => {
       view.destroy();
       if (webrtcprovider) {
@@ -99,7 +106,7 @@ export default function CodeEditor({
         onCodeChange(text); // update codespace state for text in code editor
       });
     }
-  }, [ydoc]);
+  }, [ydoc, onCodeChange]);
 
   return (
     <div className={className}>
