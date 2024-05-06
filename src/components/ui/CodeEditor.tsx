@@ -39,22 +39,22 @@ export default function CodeEditor({
     const doc = new Y.Doc(); // a collection of shared objects -> Text
     setYDoc(doc); // set the ydoc state to the doc, so it can be used later
 
-    let webrtcprovider: WebsocketProvider | null = null;
+    let websocketprovider: WebsocketProvider | null = null;
     // Connect to peers (or start connection) with websocket
-    webrtcprovider = new WebsocketProvider(
+    websocketprovider = new WebsocketProvider(
       "wss://y-websocket-xwh3.onrender.com",
       roomId,
       doc,
     );
 
     // Listen to sync events and only update the editor when the sync is complete
-    webrtcprovider.on("sync", (event: boolean) => {
+    websocketprovider.on("sync", (event: boolean) => {
       console.log(event);
       setLoading(false);
     });
 
     // Share name and color of the user through the websocket
-    webrtcprovider.awareness.setLocalStateField("user", {
+    websocketprovider.awareness.setLocalStateField("user", {
       name: username,
       color: RandomColor(),
     });
@@ -73,7 +73,7 @@ export default function CodeEditor({
         keymap.of([indentWithTab]),
         StreamLanguage.define(c), // define the language of the editor
         oneDark, // define the theme of the editor
-        yCollab(yText, webrtcprovider.awareness, {
+        yCollab(yText, websocketprovider.awareness, {
           yUndoManager,
         }), // bind the undo manager to the editor
       ],
@@ -90,8 +90,8 @@ export default function CodeEditor({
     // Cleanup function to destroy the editor and websocket connection, when the component is unmounted or roomid/username changes
     return () => {
       view.destroy();
-      if (webrtcprovider) {
-        webrtcprovider.disconnect();
+      if (websocketprovider) {
+        websocketprovider.disconnect();
         doc.destroy();
       }
     };
