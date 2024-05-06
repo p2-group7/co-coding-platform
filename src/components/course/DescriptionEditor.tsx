@@ -22,7 +22,7 @@ const EditDescript = () => {
   });
 
   const [isEditMode, setIsEditMode] = useState(false);
-  const [text, setText] = useState("Initial Text");
+  const [text, setText] = useState("Description");
 
   const toggleEditMode = () => {
     setIsEditMode(!isEditMode);
