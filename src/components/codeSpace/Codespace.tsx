@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/resizable";
 import CodeEditor from "../ui/CodeEditor";
 import TestSuite from "./Testsuite";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { env } from "@/env";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css";
@@ -62,6 +62,17 @@ function Codespace(props: CodespaceProps) {
       },
       body: JSON.stringify(data),
     })
+      .then((res) => {
+        if (res.status === 200) {
+          return res;
+        } else {
+          setOutput(
+            "Some error occured with the judge0 api request. Please try again. Status code was:" +
+              res.status,
+          );
+          throw new Error("Error with judge0 api");
+        }
+      })
       .then((res) => res.json())
       .then((data: postSubmissionResponse) => {
         console.log(data);
@@ -76,7 +87,7 @@ function Codespace(props: CodespaceProps) {
       });
   };
 
-  const checkStatus = async (token: string) => {
+  const getStatus = async (token: string) => {
     const url =
       "https://judge0-ce.p.rapidapi.com/submissions" +
       "/" +
@@ -105,6 +116,7 @@ function Codespace(props: CodespaceProps) {
         return [statusId, atob(responseData.stdout)];
       }
       if (statusId === 6) {
+        // Compile error
         setOutput(atob(responseData.compile_output));
         return [statusId, atob(responseData.compile_output)];
       }
@@ -112,8 +124,27 @@ function Codespace(props: CodespaceProps) {
       setOutput(responseData.status.description);
       return [statusId, responseData.status.description];
     } catch (err) {
-      console.log("err in checkstatus try", err);
+      console.log("err in getstatus try", err);
       return [0, "error"];
+    }
+  };
+
+  const checkStatus = async (token: string) => {
+    while (true) {
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      const [status, result] = await getStatus(token);
+      if (status === 3) {
+        console.log("test completed");
+        console.log(result);
+        return [status, result as string];
+      }
+      if (status === 1 || status === 2) {
+        continue;
+      } else {
+        console.log("test failed");
+        console.log(result);
+        return [0, result as string];
+      }
     }
   };
 
@@ -137,21 +168,15 @@ function Codespace(props: CodespaceProps) {
     });
     const responseData = (await res.json()) as postSubmissionResponse;
     const token = responseData.token;
-    while (true) {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      const [status, result] = await checkStatus(token);
-      if (status === 3) {
-        console.log("test completed");
-        console.log(result);
-        return testOutput === result;
-      }
-      if (status === 1 || status === 2) {
-        break;
-      } else {
-        console.log("test failed");
-        console.log(result);
-        return false;
-      }
+    const [status, result] = await checkStatus(token);
+    if (status === 3) {
+      console.log("test completed");
+      console.log(result);
+      return testOutput === result;
+    } else {
+      console.log("test failed");
+      console.log(result);
+      return false;
     }
   };
 
