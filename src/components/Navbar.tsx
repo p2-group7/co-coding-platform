@@ -62,7 +62,7 @@ export function NavigationMenuDemo({ groups }: { groups: GroupInfo[] }) {
                   <NavigationMenuLink asChild>
                     <a
                       className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                      href="/courses"
+                      href="/"
                     >
                       <div className="mb-2 mt-4 text-lg font-medium">
                         Your Courses
@@ -73,7 +73,7 @@ export function NavigationMenuDemo({ groups }: { groups: GroupInfo[] }) {
                     </a>
                   </NavigationMenuLink>
                 </li>
-                <ListItem href="/courses/IMPR" title="IMPR">
+                {/* <ListItem href="/courses/IMPR" title="IMPR">
                   Imperative Programming
                 </ListItem>
                 <ListItem href="/docs/installation" title="ALG">
@@ -81,7 +81,7 @@ export function NavigationMenuDemo({ groups }: { groups: GroupInfo[] }) {
                 </ListItem>
                 <ListItem href="/docs/primitives/typography" title="SLIAL">
                   hell
-                </ListItem>
+                </ListItem> */}
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>

@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -27,6 +31,7 @@ model Group {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   members   User[]
+  file      file[]
 
   @@index([name])
 }
@@ -65,6 +70,7 @@ model Exercise {
   lectureId   Int
   lecture     Lecture @relation(fields: [lectureId], references: [id])
   tests       Test[]
+  file        file[]
 }
 
 model Test {
@@ -74,4 +80,18 @@ model Test {
   exercise   Exercise @relation(fields: [exerciseId], references: [id])
   input      String
   output     String
+}
+
+model file {
+  id         Int      @id @default(autoincrement())
+  data       String
+  exerciseId Int
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  groupId    Int
+  group      Group    @relation(fields: [groupId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([exerciseId, groupId])
 }

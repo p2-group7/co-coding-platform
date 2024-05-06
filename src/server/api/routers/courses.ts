@@ -19,4 +19,11 @@ export const coursesRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.course.findUnique({ where: { id: input.id } });
     }),
+  getUserCourses: publicProcedure
+    .input(z.object({ userId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.course.findMany({
+        where: { users: { some: { userId: input.userId } } },
+      });
+    }),
 });

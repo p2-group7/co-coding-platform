@@ -4,7 +4,7 @@ import CourseCreatorCard from "@/components/course/CreateCourseCard";
 
 //This get all the course
 export default async function Courses() {
-  const course = await api.get.getCourses();
+  const course = await api.course.getUserCourses({ userId: 1 }); // TODO: change to current user id
   const courseElements = course.map(function (course) {
     const hrefStr = "/courses/" + course.id.toString();
 
