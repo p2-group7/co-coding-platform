@@ -23,6 +23,8 @@ interface CodeEditorProps {
   username: string;
   onCodeChange: (code: string) => void;
   className?: string;
+  setFileSaved: (fileSaved: boolean) => void;
+  saveFile: (code: string) => void;
 }
 
 export default function CodeEditor({
@@ -30,6 +32,8 @@ export default function CodeEditor({
   username,
   onCodeChange,
   className,
+  setFileSaved,
+  saveFile,
 }: CodeEditorProps) {
   const editorRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
@@ -47,9 +51,12 @@ export default function CodeEditor({
       doc,
     );
 
+    websocketprovider.on("connect", () => {
+      console.log("connected");
+    });
+
     // Listen to sync events and only update the editor when the sync is complete
     websocketprovider.on("sync", (event: boolean) => {
-      console.log(event);
       setLoading(false);
     });
 
@@ -71,6 +78,18 @@ export default function CodeEditor({
       extensions: [
         basicSetup,
         keymap.of([indentWithTab]),
+        keymap.of([
+          {
+            key: "Mod-s",
+            run({ state }: { state: EditorState }) {
+              console.log(state.doc);
+              const text = state.doc.toString();
+              console.log(text);
+              saveFile(text);
+              return true;
+            },
+          },
+        ]),
         StreamLanguage.define(c), // define the language of the editor
         oneDark, // define the theme of the editor
         yCollab(yText, websocketprovider.awareness, {
@@ -103,7 +122,9 @@ export default function CodeEditor({
         // log current ytext
         const yText = ydoc.getText("codemirror");
         const text = yText.toString();
+        console.log(text);
         onCodeChange(text); // update codespace state for text in code editor
+        setFileSaved(false);
       });
     }
   }, [ydoc, onCodeChange]);

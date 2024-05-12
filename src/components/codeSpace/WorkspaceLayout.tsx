@@ -29,6 +29,9 @@ export async function WorkspaceLayout({ exerciseId }: { exerciseId: number }) {
   const usernameString = username?.username ? username.username : "Anonymous";
 
   const group: GetGroupOutput = await api.group.getGroup(1);
+  if (group === null) {
+    return <div>You dont have access to this group</div>;
+  }
   // room id is group id + exercise id, therefore ensuring all exercises for the group are unique
   const exerciseWorkspaceId = group?.roomId + "-" + exerciseId.toString();
   return (
@@ -49,6 +52,8 @@ export async function WorkspaceLayout({ exerciseId }: { exerciseId: number }) {
           tests={tests}
           usernameString={usernameString}
           groupRoomId={exerciseWorkspaceId}
+          groupId={group.id}
+          exerciseId={exerciseId}
         />
       </ResizablePanel>
     </ResizablePanelGroup>

@@ -85,9 +85,9 @@ model Test {
 model file {
   id         Int      @id @default(autoincrement())
   data       String
-  exerciseId Int
+  exerciseId Int      @unique
   exercise   Exercise @relation(fields: [exerciseId], references: [id])
-  groupId    Int
+  groupId    Int      @unique
   group      Group    @relation(fields: [groupId], references: [id])
 
   createdAt DateTime @default(now())

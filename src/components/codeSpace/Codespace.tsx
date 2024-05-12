@@ -24,6 +24,8 @@ interface CodespaceProps {
   groupRoomId: string;
   usernameString: string;
   tests: getAllTestsOutput;
+  groupId: number;
+  exerciseId: number;
 }
 
 // interface for response data from judge0 api
@@ -40,9 +42,16 @@ interface postSubmissionResponse extends JSON {
   token: string;
 }
 
+export interface saveExerciseFileSchema {
+  data: string;
+  groupId: number;
+  exerciseId: number;
+}
+
 function Codespace(props: CodespaceProps) {
   const [code, setCode] = useState(""); // code from the editor
   const [output, setOutput] = useState(""); // output value from the judge0 api (or error message)
+  const [fileSaved, setFileSaved] = useState(false);
 
   // headers for the judge0 api
   const XRapidAPIHeaders = {
@@ -183,6 +192,31 @@ function Codespace(props: CodespaceProps) {
     }
   };
 
+  const handleSaveFile = (state: boolean) => {
+    if (state === false) {
+      setFileSaved(false);
+    } else {
+      setFileSaved(true);
+    }
+  };
+
+  const saveFile = async (code: string) => {
+    const data = {
+      data: btoa(code),
+      groupId: props.groupId,
+      exerciseId: props.exerciseId,
+    };
+    const url = "/api/saveExercise";
+    console.log("savefile");
+    console.log("data", data);
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+    }).catch((err) => {
+      console.log("Error in saveFile", err);
+    });
+  };
+
   return (
     <ResizablePanelGroup direction="vertical" className="h-full w-full">
       {/* Code Editor */}
@@ -194,11 +228,16 @@ function Codespace(props: CodespaceProps) {
           >
             <PlayIcon />
           </Button>
+          <div className="absolute right-8 top-16 z-10 items-center justify-center">
+            {!fileSaved ? <div className="rounded-full bg-white p-2" /> : null}
+          </div>
           <CodeEditor
             className="-z-0"
             roomId={props.groupRoomId}
             username={props.usernameString}
             onCodeChange={(code) => setCode(code)} // function to update code in state
+            setFileSaved={handleSaveFile}
+            saveFile={saveFile}
           />
         </div>
       </ResizablePanel>

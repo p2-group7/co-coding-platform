@@ -1,0 +1,99 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  username String [unique, not null]
+  password String [not null]
+  groupId Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  group Group [not null]
+  courses UsersOnCourses [not null]
+}
+
+Table Group {
+  id Int [pk, increment]
+  name String [not null]
+  roomId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  members User [not null]
+  file file [not null]
+}
+
+Table Course {
+  id Int [pk, increment]
+  name String [not null]
+  abrev String [not null]
+  description String
+  lectures Lecture [not null]
+  users UsersOnCourses [not null]
+}
+
+Table UsersOnCourses {
+  userId Int [not null]
+  courseId Int [not null]
+  course Course [not null]
+  user User [not null]
+
+  indexes {
+    (userId, courseId) [pk]
+  }
+}
+
+Table Lecture {
+  id Int [pk, increment]
+  name String [not null]
+  description String
+  courseId Int [not null]
+  exercises Exercise [not null]
+  course Course [not null]
+}
+
+Table Exercise {
+  id Int [pk, increment]
+  name String [not null]
+  description String
+  lectureId Int [not null]
+  lecture Lecture [not null]
+  tests Test [not null]
+  file file [not null]
+}
+
+Table Test {
+  id Int [pk, increment]
+  name String [not null]
+  exerciseId Int [not null]
+  exercise Exercise [not null]
+  input String [not null]
+  output String [not null]
+}
+
+Table file {
+  id Int [pk, increment]
+  data String [not null]
+  exerciseId Int [unique, not null]
+  exercise Exercise [not null]
+  groupId Int [unique, not null]
+  group Group [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+}
+
+Ref: User.groupId > Group.id
+
+Ref: UsersOnCourses.courseId > Course.id
+
+Ref: UsersOnCourses.userId > User.id
+
+Ref: Lecture.courseId > Course.id
+
+Ref: Exercise.lectureId > Lecture.id
+
+Ref: Test.exerciseId > Exercise.id
+
+Ref: file.exerciseId > Exercise.id
+
+Ref: file.groupId > Group.id
