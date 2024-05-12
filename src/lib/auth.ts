@@ -7,6 +7,13 @@ type User = {
   password: string;
 };
 
+export type Session = {
+  userId: number | undefined; // if not assigned to a user, it will be undefined. Check later to see if user is in a group
+  user: User;
+  groupId: number | undefined; // if not assigned to a group, it will be undefined. Check later to see if user is in a group
+  expires: Date;
+};
+
 const secretString = "secret";
 const secret = new TextEncoder().encode(secretString);
 const algorithm = "HS256";
@@ -27,7 +34,7 @@ export async function decrypt(input: string) {
   const { payload } = await jwtVerify(input, secret, {
     algorithms: [algorithm],
   });
-  return payload;
+  return payload as Session;
 }
 
 export async function signOut() {
@@ -39,12 +46,18 @@ export async function login(user: User) {
     return "Username or password is not valid";
   }
 
-  const isAuthorized = await checkUserCredentials(user.username, user.password);
+  const { isAuthorized, dbUser } = await checkUserCredentials(
+    user.username,
+    user.password,
+  );
 
   if (isAuthorized) {
+    const groupId = dbUser?.groupId;
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + expiryTime);
-    const session = await encrypt({ user, expires }, expires);
+    const userId = dbUser?.id;
+    const sessionData: Session = { userId, user, groupId, expires };
+    const session = await encrypt(sessionData, expires);
     cookies().set("session", session, { httpOnly: true });
     return true;
   } else {
@@ -68,11 +81,12 @@ async function checkUserCredentials(username: string, password: string) {
     });
 
     if (user && user.password === password) {
-      return true;
+      return { isAuthorized: true, dbUser: user };
     } else {
-      return false;
+      return { isAuthorized: false, dbUser: null };
     }
   } catch (error) {
     console.log("Could not retrieve user", error);
+    return { isAuthorized: false, dbUser: null };
   }
 }

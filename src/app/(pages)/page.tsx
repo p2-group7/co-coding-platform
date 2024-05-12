@@ -1,10 +1,16 @@
 import { api } from "@/trpc/server";
 import InfoCard from "@/components/course/InfoCard";
 import CourseCreatorCard from "@/components/course/CreateCourseCard";
+import { getSession } from "@/lib/auth";
 
 //This get all the course
 export default async function Courses() {
-  const course = await api.course.getUserCourses({ userId: 1 }); // TODO: change to current user id
+  const userId = (await getSession())?.userId;
+  if (!userId) {
+    return <p>You are not logged in</p>;
+  }
+  const course = await api.course.getUserCourses({ userId: userId });
+
   const courseElements = course.map(function (course) {
     const hrefStr = "/courses/" + course.id.toString();
 
