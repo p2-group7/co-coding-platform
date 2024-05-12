@@ -121,7 +121,8 @@ const CreateLectureCard: React.FC<CreateLectureCardProps> = ({ course }) => {
                 />
 
                 <SheetClose>
-                  <Button type="submit">Submit</Button> {/* initialize submit function */}
+                  <Button type="submit">Submit</Button>{" "}
+                  {/* initialize submit function */}
                 </SheetClose>
               </form>
             </Form>

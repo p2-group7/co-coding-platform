@@ -1,29 +1,44 @@
+"use client";
 import * as React from "react";
 
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import { PlayIcon } from "@radix-ui/react-icons";
 
-const tags = [
-  "1: n > 5",
-  "2: n > 30",
-  "3: Compiled",
-  "4: n > 100",
-  "5: n > 500",
-  "6: n > 1000",
-  "7: n > 5000",
-  "8: n > 10000",
-];
+import type { inferRouterOutputs } from "@trpc/server";
+import type { AppRouter } from "@/server/api/root";
+import TestButton from "./TestButton";
 
-export function testsuite() {
+type RouterOutput = inferRouterOutputs<AppRouter>;
+
+type getAllTestsOutput = RouterOutput["test"]["getAllTestForExercise"];
+
+export function Testsuite({
+  testSubmit,
+  tests,
+  setOutput,
+}: {
+  testSubmit: (
+    testInput: string,
+    testOutput: string,
+  ) => Promise<boolean | undefined>;
+  tests: getAllTestsOutput;
+  setOutput: (output: string) => void;
+}) {
   return (
     <div className=" h-full w-full overflow-auto rounded-md border bg-secondary ">
       <div className="p-4 pb-2 ">
-        {tags.map((tag) => (
-          <React.Fragment key={tag}>
-            <div className="flex items-center justify-between">
-              <div>{tag}</div>
-              <Button className="bg-black font-bold"><PlayIcon /></Button>
+        {tests.map((test) => (
+          <React.Fragment key={test.id}>
+            <div
+              id={test.id.toString()}
+              className="flex items-center justify-between"
+            >
+              <div>{test.name}</div>
+              <TestButton
+                id={test.id.toString()}
+                testInput={test.input}
+                testOutput={test.output}
+                testSubmit={testSubmit}
+              />
             </div>
             <Separator className="my-2" />
           </React.Fragment>
@@ -33,4 +48,4 @@ export function testsuite() {
   );
 }
 
-export default testsuite;
+export default Testsuite;
