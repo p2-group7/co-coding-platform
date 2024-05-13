@@ -14,6 +14,7 @@ const ExerciseInfoBox: React.FC<ExerciseProps> = ({
   ExsDescription,
   ExsLectureId,
 }) => {
+  const formattedDescription = ExsDescription.replaceAll("\\n", "<br>");
   return (
     <div className="h-full w-full">
       <div className="flex h-full flex-col rounded-lg border border-transparent bg-secondary p-4">
@@ -24,7 +25,10 @@ const ExerciseInfoBox: React.FC<ExerciseProps> = ({
           </Button>
         </div>
         <h2 className="font-bold">{ExsTitle}</h2>
-        <p>{ExsDescription}</p>
+        <div
+          className="whitespace-pre-wrap"
+          dangerouslySetInnerHTML={{ __html: formattedDescription }}
+        ></div>
       </div>
     </div>
   );

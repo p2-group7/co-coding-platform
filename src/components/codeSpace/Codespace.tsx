@@ -222,13 +222,7 @@ function Codespace(props: CodespaceProps) {
           <ResizableHandle />
           {/* Output */}
           <ResizablePanel defaultSize={50}>
-            <div className="flex h-full p-6">
-              <ReactQuill
-                value={output}
-                theme="bubble"
-                readOnly={true}
-              ></ReactQuill>
-            </div>
+            <div className="whitespace-pre-wrap">{output}</div>
           </ResizablePanel>
           {/* End of Output */}
         </ResizablePanelGroup>

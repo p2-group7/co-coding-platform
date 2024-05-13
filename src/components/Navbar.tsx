@@ -13,7 +13,7 @@ import {
 
 const menuComponents: { title: string; href: string; description: string }[] = [
   {
-    title: "Main Page / Login",
+    title: "Main Page",
     href: "/",
     description: "",
   },
@@ -24,13 +24,7 @@ const menuComponents: { title: string; href: string; description: string }[] = [
   },
 ];
 
-export interface GroupInfo {
-  id: number;
-  name: string;
-  href: string;
-}
-
-export function NavigationMenuDemo({ groups }: { groups: GroupInfo[] }) {
+export function NavigationMenuDemo() {
   return (
     <div>
       <NavigationMenu>
@@ -46,57 +40,6 @@ export function NavigationMenuDemo({ groups }: { groups: GroupInfo[] }) {
                     key={component.title}
                     title={component.title}
                     href={component.href}
-                  ></ListItem>
-                ))}
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem className="w-25 h-11">
-            <NavigationMenuTrigger className="h-full w-full select-none justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
-              Courses
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                <li className="row-span-3">
-                  <NavigationMenuLink asChild>
-                    <a
-                      className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                      href="/"
-                    >
-                      <div className="mb-2 mt-4 text-lg font-medium">
-                        Your Courses
-                      </div>
-                      <p className="text-sm leading-tight text-muted-foreground">
-                        This is fun 🥲
-                      </p>
-                    </a>
-                  </NavigationMenuLink>
-                </li>
-                {/* <ListItem href="/courses/IMPR" title="IMPR">
-                  Imperative Programming
-                </ListItem>
-                <ListItem href="/docs/installation" title="ALG">
-                  Algorithms and Data Structures
-                </ListItem>
-                <ListItem href="/docs/primitives/typography" title="SLIAL">
-                  hell
-                </ListItem> */}
-              </ul>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-
-          <NavigationMenuItem className="w-25 h-11">
-            <NavigationMenuTrigger className="h-full w-full select-none justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md">
-              Groups
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <ul className="grid w-[300px] gap-3 p-4 md:w-[400px] md:grid-cols-2 lg:w-[600px] ">
-                {groups.map((group) => (
-                  <ListItem
-                    key={group.id}
-                    title={group.name}
-                    href={group.href}
                   ></ListItem>
                 ))}
               </ul>
