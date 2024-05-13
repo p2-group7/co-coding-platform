@@ -17,7 +17,7 @@ export type Session = {
 const secretString = "secret";
 const secret = new TextEncoder().encode(secretString);
 const algorithm = "HS256";
-const expiryTime = 60 * 5;
+const expiryTime = 60 * 30;
 
 // based on https://github.com/balazsorban44/auth-poc-next/blob/main/lib.ts
 
