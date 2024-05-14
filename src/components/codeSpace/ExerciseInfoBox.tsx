@@ -21,7 +21,7 @@ const ExerciseInfoBox: React.FC<ExerciseProps> = ({
         <div className="mb-4 flex items-start">
           <ExCombo lectureId={ExsLectureId} selectedExerciseName={ExsTitle} />
           <Button className="mx-5 bg-black">
-            <Pencil1Icon />
+            <Pencil1Icon className="text-white" />
           </Button>
         </div>
         <h2 className="font-bold">{ExsTitle}</h2>

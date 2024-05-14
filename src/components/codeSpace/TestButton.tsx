@@ -28,7 +28,7 @@ const testButtonLoadingStyle = cn(
   "animate-pulse",
 );
 
-const testButtonNotrunStyle = cn("bg-black font-bold", "hover:bg-black/70");
+const testButtonNotrunStyle = cn("bg-black font-bold", "hover:bg-primary/70");
 
 const testButtonStyle = (state: TestButtonState) => {
   switch (state) {
@@ -79,7 +79,7 @@ const TestButton = ({
       className={testButtonStyle(buttonState)}
       onClick={handleButtonClick}
     >
-      <PlayIcon />
+      <PlayIcon className="text-white" />
     </Button>
   );
 };
