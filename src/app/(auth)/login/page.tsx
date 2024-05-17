@@ -143,7 +143,9 @@ export default function LoginForm() {
                 />
               </CardContent>
               <CardFooter>
-                <Button className="w-full">Sign in</Button>
+                <Button className="w-full" type="submit">
+                  Sign in
+                </Button>
               </CardFooter>
             </form>
           </Form>

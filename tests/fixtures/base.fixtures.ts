@@ -3,8 +3,9 @@ import { LoginPage } from "../pages/login.page";
 
 import prisma from "../helpers/prisma";
 import { faker } from "@faker-js/faker";
+import { Course } from "@prisma/client";
 
-type AuthFixtures = {
+type BaseFixtures = {
   loginPage: LoginPage;
   user: User;
 };
@@ -15,7 +16,7 @@ type User = {
   groupId: number;
 };
 
-export const test = base.extend<AuthFixtures>({
+export const test = base.extend<BaseFixtures>({
   // TODO remove?
   loginPage: async ({ page }, use) => {
     const loginPage = new LoginPage(page);
