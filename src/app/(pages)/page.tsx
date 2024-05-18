@@ -29,7 +29,7 @@ export default async function Courses() {
   return (
     <div className="m-10 grid grid-cols-3 gap-4">
       {courseElements}
-      <CourseCreatorCard />
+      <CourseCreatorCard userId={userId} />
     </div>
   );
 }
