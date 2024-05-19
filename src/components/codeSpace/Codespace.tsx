@@ -254,7 +254,9 @@ function Codespace(props: CodespaceProps) {
           <ResizableHandle />
           {/* Output */}
           <ResizablePanel defaultSize={50}>
-            <div className="whitespace-pre-wrap">{output}</div>
+            <div className="whitespace-pre-wrap" data-testid="test">
+              {output}
+            </div>
           </ResizablePanel>
           {/* End of Output */}
         </ResizablePanelGroup>

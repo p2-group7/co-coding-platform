@@ -156,4 +156,6 @@ test.describe("Routing and creation of courses, lectures and exercises", () => {
     await page.waitForURL("/courses/**/lectures/**/exercises/**");
     await page.locator("text=New Exercise Description").isVisible();
   });
+
+  // TODO test that switches between exercises using the exercise selector
 });

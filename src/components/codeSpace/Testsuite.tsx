@@ -31,6 +31,7 @@ export function Testsuite({
             <div
               id={test.id.toString()}
               className="flex items-center justify-between"
+              data-testid={test.id.toString()}
             >
               <div>{test.name}</div>
               <TestButton

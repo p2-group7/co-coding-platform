@@ -10,6 +10,9 @@ export class LoginPage {
   async goto() {
     await this.page.goto("http://localhost:3000/login");
     await this.page.waitForURL("http://localhost:3000/login");
+    await this.page.waitForSelector("text=login");
+    // sleep for 2 seconds to make sure the page is fully loaded
+    await new Promise((resolve) => setTimeout(resolve, 2000));
   }
 
   async populateLoginForm(username: string, password: string) {

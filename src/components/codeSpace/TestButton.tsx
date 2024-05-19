@@ -78,6 +78,7 @@ const TestButton = ({
       id={id}
       className={testButtonStyle(buttonState)}
       onClick={handleButtonClick}
+      data-testid="test-button"
     >
       <PlayIcon className="text-white" />
     </Button>

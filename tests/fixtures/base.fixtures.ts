@@ -8,10 +8,10 @@ import { randomInt } from "crypto";
 
 type TestData = {
   courses: Course[];
-  //users: User[];
   lectures: Record<number, Lecture[]>;
   exercises: Record<number, Exercise[]>;
   usersOnCourses: UsersOnCourses[];
+  users: User[];
 };
 
 type BaseFixtures = {
@@ -26,8 +26,6 @@ type User = {
   password: string;
   groupId: number;
 };
-
-let baseUser: User;
 
 export const test = base.extend<BaseFixtures>({
   // TODO remove?
@@ -50,8 +48,6 @@ export const test = base.extend<BaseFixtures>({
     });
 
     const id = user.id;
-
-    baseUser = user;
 
     await use({ id, username, password, groupId });
   },
@@ -110,13 +106,39 @@ export const test = base.extend<BaseFixtures>({
       usersOnCourses.push(usersOnCourse);
     }
 
-    // TODO possibly add random users and assign them to courses
+    // Add two users for collaborative exercises test
+    let users: User[] = [];
+    const userCount = 2;
+
+    const testGroup = await prisma.group.create({
+      data: { name: "testGroup", roomId: "room1" },
+    });
+
+    for (let i = 0; i < userCount; i++) {
+      const user = await prisma.user.create({
+        data: {
+          username: faker.internet.userName(),
+          password: "password123",
+          groupId: testGroup.id,
+        },
+      });
+      users.push(user);
+    }
+
+    for (const user of users) {
+      // assign users to courses
+      const usersOnCourse = await prisma.usersOnCourses.create({
+        data: { userId: user.id, courseId: courses[0]?.id ?? 0 },
+      });
+      usersOnCourses.push(usersOnCourse);
+    }
 
     await use({
       courses,
       lectures: courseLecturers,
       exercises: lecturesExercises,
       usersOnCourses,
+      users,
     });
   },
 });
