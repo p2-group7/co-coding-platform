@@ -44,7 +44,7 @@ type CreateCourseCardProps = {
 };
 
 // Body of CourseCreatorCard component
-const CourseCreatorCard: React.FC<CreateCourseCardProps> = ({ userId }) => {
+const CreateCourseCard = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -126,4 +126,4 @@ const CourseCreatorCard: React.FC<CreateCourseCardProps> = ({ userId }) => {
   );
 };
 
-export default CourseCreatorCard;
+export default CreateCourseCard;
