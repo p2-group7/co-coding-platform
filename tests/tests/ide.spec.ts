@@ -89,9 +89,10 @@ test.describe("Collaborative coding area", () => {
     await page2.keyboard.press("Enter");
     await page2.keyboard.insertText("int sum = num1 + num2;\n");
 
+    await expect(page1.locator("text=int sum")).toBeVisible();
     await page1.getByRole("button").nth(2).click(); // click the run button
 
-    await page1.locator("text=42;").isVisible();
+    await expect(page1.locator("text=42")).toBeVisible();
 
     // Close contexts
     await context1.close();
