@@ -31,7 +31,6 @@ model Group {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   members   User[]
-  file      file[]
 
   @@index([name])
 }
@@ -70,7 +69,6 @@ model Exercise {
   lectureId   Int
   lecture     Lecture @relation(fields: [lectureId], references: [id])
   tests       Test[]
-  file        file[]
 }
 
 model Test {
@@ -82,16 +80,3 @@ model Test {
   output     String
 }
 
-model file {
-  id         Int      @id @default(autoincrement())
-  data       String
-  exerciseId Int
-  exercise   Exercise @relation(fields: [exerciseId], references: [id])
-  groupId    Int
-  group      Group    @relation(fields: [groupId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([exerciseId, groupId])
-}
