@@ -26,10 +26,10 @@ If wanted to change to a different websocket server, it is possible to change by
 
 ## Link to CoCo deployed on Vercel
 On this deployment is the same data as used in the usablity test. This page will NOT be changed before the exam date.
-Link: https://co-coding-platform.vercel.app/login
-Login:
-   username: user1, user2, user3, user4, user5, user5.
-   password: Same as username (They must match)
+1. Link: https://co-coding-platform.vercel.app/login
+2. Login:
+   - username: user1, user2, user3, user4, user5, user5.
+   - password: Same as username (They must match)
 
 
 ## Testing
