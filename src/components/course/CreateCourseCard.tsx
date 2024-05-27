@@ -25,8 +25,11 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
+import { get } from "http";
+import { getSession } from "@/lib/auth";
+import { useEffect } from "react";
 
-// PLEASE CHECK "CREATELECTURECARD" FILE FOR CLARIFICATIONS, THERE ARE MORE COMMENTS. 
+// PLEASE CHECK "CREATELECTURECARD" FILE FOR CLARIFICATIONS, THERE ARE MORE COMMENTS.
 
 // Define Zod schema for form validation
 const FormSchema = z.object({
@@ -36,8 +39,12 @@ const FormSchema = z.object({
   abrev: z.string().min(1).max(10),
 });
 
+type CreateCourseCardProps = {
+  userId: number;
+};
+
 // Body of CourseCreatorCard component
-const CourseCreatorCard = () => {
+const CreateCourseCard = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -48,13 +55,16 @@ const CourseCreatorCard = () => {
   const router = useRouter();
 
   const createCourse = api.course.create.useMutation({
-    onSuccess: () => {
+    onSuccess: (course) => {
       router.refresh();
+    },
+    onError: (error) => {
+      console.log("Error creating course and assigning user to it:", error);
     },
   });
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
-    createCourse.mutate(values);
+    createCourse.mutate({ ...values, userId });
   }
   // Sheet and form from shadcn
   return (
@@ -104,7 +114,8 @@ const CourseCreatorCard = () => {
                   )}
                 />
                 <SheetClose>
-                  <Button type="submit">Submit</Button>  {/* initialize submit function */}
+                  <Button type="submit">Submit</Button>{" "}
+                  {/* initialize submit function */}
                 </SheetClose>
               </form>
             </Form>
@@ -115,4 +126,4 @@ const CourseCreatorCard = () => {
   );
 };
 
-export default CourseCreatorCard;
+export default CreateCourseCard;

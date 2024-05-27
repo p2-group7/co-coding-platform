@@ -1,6 +1,6 @@
 import { api } from "@/trpc/server";
 import InfoCard from "@/components/course/InfoCard";
-import CourseCreatorCard from "@/components/course/CreateCourseCard";
+import CreateCourseCard from "@/components/course/CreateCourseCard";
 import { getSession } from "@/lib/auth";
 
 //This get all the course
@@ -29,7 +29,7 @@ export default async function Courses() {
   return (
     <div className="m-10 grid grid-cols-3 gap-4">
       {courseElements}
-      <CourseCreatorCard />
+      <CreateCourseCard />
     </div>
   );
 }

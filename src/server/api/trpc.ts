@@ -11,6 +11,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
+import { getSession } from "@/lib/auth";
 
 /**
  * 1. CONTEXT
@@ -25,7 +26,7 @@ import { db } from "@/server/db";
  * @see https://trpc.io/docs/server/context
  */
 
-//const session = await getServerAuthSession();
+//const session = await getSession();
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   return {

@@ -15,6 +15,7 @@ import type { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/server/api/root";
 import { Button } from "../ui/button";
 import { PlayIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type RouterOutput = inferRouterOutputs<AppRouter>;
 
@@ -40,9 +41,31 @@ interface postSubmissionResponse extends JSON {
   token: string;
 }
 
+type buttonState = "loading" | "default";
+
+const runButtonStyle = cn("bg-green-500 font-bold", "hover:bg-green-500/70");
+
+const runButtonLoadingStyle = cn(
+  "bg-gray-500 font-bold",
+  "hover:bg-gray-500/70",
+  "animate-pulse",
+);
+
+const buttonStyle = (state: buttonState) => {
+  switch (state) {
+    case "loading":
+      return runButtonLoadingStyle;
+    case "default":
+      return runButtonStyle;
+    default:
+      return runButtonStyle;
+  }
+};
+
 function Codespace(props: CodespaceProps) {
   const [code, setCode] = useState(""); // code from the editor
   const [output, setOutput] = useState(""); // output value from the judge0 api (or error message)
+  const [buttonState, setButtonState] = useState<buttonState>("default");
 
   // headers for the judge0 api
   const XRapidAPIHeaders = {
@@ -51,7 +74,7 @@ function Codespace(props: CodespaceProps) {
   };
 
   // handle submitting code to judge0 api -> used from the button in the code editor
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // send code to judge0 api
     const data = {
       language_id: 50, // id for C with gcc 9.2.0
@@ -59,7 +82,7 @@ function Codespace(props: CodespaceProps) {
     };
     const url =
       "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&fields=*";
-    fetch(url, {
+    await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json", // this is the default header
@@ -82,10 +105,10 @@ function Codespace(props: CodespaceProps) {
       // If status code is as expected, then parse the response as JSON
       .then((res) => res.json())
       // The data is now the response body, which fits postSubmissionResponse interface
-      .then((data: postSubmissionResponse) => {
+      .then(async (data: postSubmissionResponse) => {
         console.log(data);
         const token = data.token; // get submission token
-        checkStatus(token).catch((err) => {
+        await checkStatus(token).catch((err) => {
           console.log("err in checkstatus", err);
         }); // start checking status -> await is not needed here, since it prints the result to the console
       })
@@ -183,14 +206,23 @@ function Codespace(props: CodespaceProps) {
     }
   };
 
+  const handleRun = async () => {
+    setButtonState("loading");
+    await handleSubmit();
+    setButtonState("default");
+  };
+
   return (
     <ResizablePanelGroup direction="vertical" className="h-full w-full">
       {/* Code Editor */}
       <ResizablePanel defaultSize={50}>
         <div className="relative m-1">
           <Button
-            onClick={() => handleSubmit()}
-            className="absolute right-3 top-3 z-10 bg-gray-500 hover:bg-gray-500/70"
+            onClick={() => handleRun()}
+            className={cn(
+              "absolute right-3 top-3 z-10",
+              buttonStyle(buttonState),
+            )}
           >
             <PlayIcon />
           </Button>
@@ -222,7 +254,9 @@ function Codespace(props: CodespaceProps) {
           <ResizableHandle />
           {/* Output */}
           <ResizablePanel defaultSize={50}>
-            <div className="whitespace-pre-wrap">{output}</div>
+            <div className="whitespace-pre-wrap" data-testid="test">
+              {output}
+            </div>
           </ResizablePanel>
           {/* End of Output */}
         </ResizablePanelGroup>

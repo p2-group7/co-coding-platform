@@ -8,8 +8,17 @@
 # 4. Run this script - `./start-database.sh`
 
 # On Linux and macOS you can run this script directly - `./start-database.sh`
+# import env variables from .env
+set -a
+source .env
 
-DB_CONTAINER_NAME=".-postgres"
+DB_CONTAINER_NAME="postgres"
+
+if [ $DATABASE_TEST = "true" ]; then
+  echo "Database test mode is enabled"
+  DB_CONTAINER_NAME="test-postgres"
+fi
+
 
 if ! [ -x "$(command -v docker)" ]; then
   echo "Docker is not installed. Please install docker and try again.\nDocker install guide: https://docs.docker.com/engine/install/"
@@ -21,10 +30,6 @@ if [ "$(docker ps -q -f name=$DB_CONTAINER_NAME)" ]; then
   echo "Database container started"
   exit 0
 fi
-
-# import env variables from .env
-set -a
-source .env
 
 DB_PASSWORD=$(echo $DATABASE_URL | awk -F':' '{print $3}' | awk -F'@' '{print $1}')
 

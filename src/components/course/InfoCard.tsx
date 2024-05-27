@@ -31,7 +31,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ href, cardDescription, cardTitle })
   const router = useRouter();
   const handleButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    event.stopPropagation();
+    event.stopPropagation(); // Stops the mouse click event from propagating further. In this case, stops it from clicking the outer div element (the card)
 
     router.push(href + "/edit");
   };
