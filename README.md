@@ -1,29 +1,24 @@
-# Create T3 App
+# CoCo
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A platform for coding and collaborating for students and teachers.
 
-## What's next? How do I make an app with this?
+## Installation
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+1. Clone the repository
+2. Install bun with `npm install -g bun`
+3. Install dependencies with `bun install`
+4. Create a .env from the .env.example file with the following variables:
+   - DATABASE_URL: The URL of the Postgres database
+   - NEXT_PUBLIC_RAPID_API_KEY: The API key for the judge0 API
+5. Run the start database script with `./start-database.sh` (given by T3)
+6. Setup the database with `bun run db:push`
+7. Go to the following rapid API https://rapidapi.com/judge0-official/api/judge0-ce. Create account and subscribe to the API to get a key. Copy the key and paste it in the .env file for NEXT_PUBLIC_RAPID_API_KEY.
+8. Run the app with `bun run dev`
+9. Go to http://localhost:3000 to see the app. This will prompt for a login, which is not present in the db by default.
+10. Open prisma studio and create a user. This can be done via `bun run db:studio`. Inside Studio, first create a group with the name "testGroup" and room "room1". Then create a user in the group with the username "testUser" and password "testUser".
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Testing
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+To run the tests, run `bun run test` in the terminal. There is an issue where the development server may not start by itself, so you may need to run the ./start-database.sh script again and make sure this process is running before running the tests.
 
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
-
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
-
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+It is also possible to run the tests in a headed enironment with `bun run test:headed`.
