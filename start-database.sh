@@ -14,6 +14,9 @@ source .env
 
 DB_CONTAINER_NAME="postgres"
 
+docker stop $DB_CONTAINER_NAME
+docker stop test-postgres
+
 if [ $DATABASE_TEST = "true" ]; then
   echo "Database test mode is enabled"
   DB_CONTAINER_NAME="test-postgres"
@@ -25,7 +28,7 @@ if ! [ -x "$(command -v docker)" ]; then
   exit 1
 fi
 
-if [ "$(docker ps -q -f name=$DB_CONTAINER_NAME)" ]; then
+if [ "$(docker ps -a | grep $DB_CONTAINER_NAME)" ]; then
   docker start $DB_CONTAINER_NAME
   echo "Database container started"
   exit 0
