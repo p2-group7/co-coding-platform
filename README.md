@@ -17,6 +17,13 @@ A platform for coding and collaborating for students and teachers.
 9. Go to http://localhost:3000 to see the app. This will prompt for a login, which is not present in the db by default.
 10. Open prisma studio and create a user. This can be done via `bun run db:studio`. Inside Studio, first create a group with the name "testGroup". Then create a user in the group with the username "testUser" and password "testUser" (under User model add a user, then assign the user to the group).
 
+Now it is possible to go and login with the given username and password. Then you can create a course, a lecture and an exercise. When going into the exercise page, at first it will show a loading message. This can take some time, since the code editor is connecting to the websocket server that allows for code collaboration. This is hosted on a Render server, which idles after being idle for a while. It is also possible to set your own Render server up, but this is not supported completely yet, since it takes a little effort to get the server running.
+
+The Render server is setup based on:
+<https://github.com/yjs/y-websocket>
+
+If wanted to change to a different websocket server, it is possible to change by going into the CodeEditor.tsx file and changing the websocket url.
+
 ## Testing
 
 1. install playwright dependencies and browsers with `npx playwright install`. (this is not supported if using arch linux)
