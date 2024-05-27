@@ -18,6 +18,9 @@ A platform for coding and collaborating for students and teachers.
 10. Open prisma studio and create a user. This can be done via `bun run db:studio`. Inside Studio, first create a group with the name "testGroup". Then create a user in the group with the username "testUser" and password "testUser" (under User model add a user, then assign the user to the group).
 
 ## Testing
+
+1. install playwright dependencies and browsers with `npx playwright install`. (this is not supported if using arch linux)
+
 Before running tests, the Render server for the websocket (for codemirror) needs to be running and not idle. To prompt the Render server to start, first run the tests (they will fail on code editor), then wait 2 minutes and then run again.
 
 
