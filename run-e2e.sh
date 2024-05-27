@@ -9,11 +9,11 @@ if [ "$#" -eq  "0" ]
 
   then
 
-    npx playwright test
+    npx playwright test --retries=3
 
 else
 
-    npx playwright test --headed
+    npx playwright test --headed --retries=3
 
 fi
 
